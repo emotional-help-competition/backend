@@ -1,4 +1,4 @@
-package app.emotionalhelp.user;
+package com.epam.emotionalhelp.user;
 
 public class UserServiceImplTest {
 }
