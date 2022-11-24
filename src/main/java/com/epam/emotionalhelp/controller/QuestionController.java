@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/v1/questions")
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
 
-    @GetMapping("/findAll")
+    @GetMapping
     public Collection<Question> findAll() {
         return questionService.findAll();
     }
