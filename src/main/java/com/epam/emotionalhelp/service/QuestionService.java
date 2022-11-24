@@ -5,5 +5,5 @@ import com.epam.emotionalhelp.module.Question;
 import java.util.Collection;
 
 public interface QuestionService {
-    Collection<Question> getAll();
+    Collection<Question> findAll();
 }
