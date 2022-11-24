@@ -2,21 +2,21 @@ package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.module.Question;
 import com.epam.emotionalhelp.service.QuestionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
 @RestController
+@RequestMapping("/questions")
+@RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
 
-    public QuestionController(QuestionService questionService) {
-        this.questionService = questionService;
-    }
-
-    @GetMapping("/getAll")
-    public Collection<Question> getAll() {
-        return questionService.getAll();
+    @GetMapping("/findAll")
+    public Collection<Question> findAll() {
+        return questionService.findAll();
     }
 }
