@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:emotionalHelp
+    username: team3
+    password: qwerty
+    driverClassName: org.h2.Driver
