@@ -4,3 +4,6 @@ spring:
     username: team3
     password: qwerty
     driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
