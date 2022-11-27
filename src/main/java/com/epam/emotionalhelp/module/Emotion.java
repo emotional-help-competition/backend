@@ -1,27 +1,23 @@
 package com.epam.emotionalhelp.module;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import static com.epam.emotionalhelp.module.util.ColumnName.*;
-
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = QUESTION_TABLE_NAME)
-public class Question {
+@Table(name = EMOTION_TABLE_NAME)
+public class Emotion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(name = QUESTION_TEXT)
-    private String text;
-
-    @Column(name = QUESTION_EMOTION_ID)
-    private Long emotionId;
+    @Column(name = EMOTION_DESCRIPTION)
+    private String description;
 }
