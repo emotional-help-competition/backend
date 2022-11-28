@@ -1,14 +1,15 @@
-package com.epam.emotionalhelp.module;
+package com.epam.emotionalhelp.model;
 
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Set;
 
-import static com.epam.emotionalhelp.module.util.ColumnName.*;
+import static com.epam.emotionalhelp.model.util.ColumnName.*;
 
 @Builder
 @Getter
@@ -17,6 +18,7 @@ import static com.epam.emotionalhelp.module.util.ColumnName.*;
 @NoArgsConstructor
 @Entity
 @Table(name = QUIZ_TABLE_NAME)
+@EntityListeners(AuditingEntityListener.class)
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +33,7 @@ public class Quiz {
     private String description;
 
     @Column(name = QUIZ_CREATE_DATE)
-    private LocalDateTime createDate;
-
+    private ZonedDateTime createDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = QUIZ_QUESTION,
