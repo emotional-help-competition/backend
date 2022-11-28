@@ -6,6 +6,7 @@ import com.epam.emotionalhelp.service.QuizResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class QuizResultController {
     private final QuizResultService quizResultService;
 
     @PostMapping
-    public Map<Long, Integer> calculateResult(@RequestBody List<EmotionDto> emotions) {
+    public Map<Long, Integer> calculateResult(@RequestBody @Valid List<EmotionDto> emotions) {
         return quizResultService.calculateResult(emotions);
     }
 }

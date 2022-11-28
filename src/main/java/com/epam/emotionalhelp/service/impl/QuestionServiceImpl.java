@@ -16,8 +16,5 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Collection<Question> findAll() {
         return questionRepository.findAll();
-//        return List.of(Question.builder().id(1L).text("are you angry?").emotionId(112L).build(),
-//                Question.builder().id(2L).text("are you sad?").emotionId(11L).build(),
-//                Question.builder().id(3L).text("are you happy?").emotionId(112L).build());
     }
 }
