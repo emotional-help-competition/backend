@@ -28,6 +28,4 @@ public final class ColumnName {
     //EMOTION table
     public static final String EMOTION_TABLE_NAME = "emotion";
     public static final String EMOTION_DESCRIPTION = "description";
-
-
 }
