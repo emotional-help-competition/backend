@@ -9,10 +9,10 @@ VALUES ('anxious');
 
 
 INSERT INTO question (text, emotion_id)
-VALUES ('How do u feel today?', NULL);
+VALUES ('How do u feel today?', 1);
 INSERT INTO question (text, emotion_id)
-VALUES ('How do u feel yesterday?', NULL);
+VALUES ('How do u feel yesterday?', 1);
 INSERT INTO question (text, emotion_id)
-VALUES ('How do u feel at 12:00?', NULL);
+VALUES ('How do u feel at 12:00?', 2);
 INSERT INTO question (text, emotion_id)
-VALUES ('How do u feel at 21:00?', NULL);
+VALUES ('How do u feel at 21:00?', 3);
