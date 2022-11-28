@@ -1,4 +1,4 @@
-package com.epam.emotionalhelp.dto;
+package com.epam.emotionalhelp.controller.dto;
 
 import lombok.Data;
 
