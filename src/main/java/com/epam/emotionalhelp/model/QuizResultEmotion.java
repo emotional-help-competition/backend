@@ -1,9 +1,15 @@
 package com.epam.emotionalhelp.model;
 
 import com.epam.emotionalhelp.model.embeddedkey.QuizResultEmotionKey;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class QuizResultEmotion {
     @EmbeddedId
