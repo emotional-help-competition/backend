@@ -1,6 +1,6 @@
 package com.epam.emotionalhelp.service.impl;
 
-import com.epam.emotionalhelp.module.Question;
+import com.epam.emotionalhelp.model.Question;
 import com.epam.emotionalhelp.repository.QuestionRepository;
 import com.epam.emotionalhelp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Collection<Question> findAll() {
-        return (Collection<Question>) questionRepository.findAll();
+        return questionRepository.findAll();
 //        return List.of(Question.builder().id(1L).text("are you angry?").emotionId(112L).build(),
 //                Question.builder().id(2L).text("are you sad?").emotionId(11L).build(),
 //                Question.builder().id(3L).text("are you happy?").emotionId(112L).build());

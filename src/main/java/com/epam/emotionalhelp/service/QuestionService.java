@@ -1,6 +1,6 @@
 package com.epam.emotionalhelp.service;
 
-import com.epam.emotionalhelp.module.Question;
+import com.epam.emotionalhelp.model.Question;
 
 import java.util.Collection;
 

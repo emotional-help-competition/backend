@@ -1,6 +1,6 @@
 package com.epam.emotionalhelp.service.impl;
 
-import com.epam.emotionalhelp.module.Emotion;
+import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.service.EmotionService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,6 @@ public class EmotionServiceImpl implements EmotionService {
 
     @Override
     public Collection<Emotion> findAll() {
-        return (Collection<Emotion>) emotionRepository.findAll();
+        return emotionRepository.findAll();
     }
 }

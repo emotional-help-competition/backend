@@ -1,4 +1,4 @@
-package com.epam.emotionalhelp.module.util;
+package com.epam.emotionalhelp.model.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ public final class ColumnName {
 
 
     //QUESTION table
-    public static final String QUESTION_TABLE_NAME = "quiz";
+    public static final String QUESTION_TABLE_NAME = "question";
     public static final String QUESTION_TEXT = "text";
     public static final String QUESTION_EMOTION_ID = "emotion_id";
 

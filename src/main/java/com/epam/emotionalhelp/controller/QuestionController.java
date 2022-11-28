@@ -1,7 +1,7 @@
 package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.config.CORSConfig;
-import com.epam.emotionalhelp.module.Question;
+import com.epam.emotionalhelp.model.Question;
 import com.epam.emotionalhelp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

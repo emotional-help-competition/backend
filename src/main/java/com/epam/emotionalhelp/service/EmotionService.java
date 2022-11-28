@@ -1,6 +1,6 @@
 package com.epam.emotionalhelp.service;
 
-import com.epam.emotionalhelp.module.Emotion;
+import com.epam.emotionalhelp.model.Emotion;
 
 import java.util.Collection;
 
