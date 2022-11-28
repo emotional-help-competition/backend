@@ -1,8 +1,6 @@
 package com.epam.emotionalhelp.module;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,6 +11,8 @@ import java.util.Set;
 import static com.epam.emotionalhelp.module.util.ColumnName.*;
 
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

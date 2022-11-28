@@ -9,6 +9,8 @@ import static com.epam.emotionalhelp.module.util.ColumnName.*;
 
 
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
