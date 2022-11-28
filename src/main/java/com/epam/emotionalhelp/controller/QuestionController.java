@@ -12,7 +12,7 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.*;
 import static com.epam.emotionalhelp.controller.util.QueryParam.*;
 
 @RestController
-@RequestMapping(path = QUESTIONS , produces = JSON)
+@RequestMapping(path = QUESTIONS, produces = JSON)
 @CrossOrigin(origins = CORSConfig.LOCALHOST)
 @RequiredArgsConstructor
 public class QuestionController {
