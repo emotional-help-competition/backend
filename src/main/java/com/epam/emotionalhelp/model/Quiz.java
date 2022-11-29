@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import static com.epam.emotionalhelp.model.util.ColumnName.*;
@@ -33,7 +33,7 @@ public class Quiz {
     private String description;
 
     @Column(name = QUIZ_CREATE_DATE)
-    private ZonedDateTime createDate;
+    private LocalDateTime createDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = QUIZ_QUESTION,
