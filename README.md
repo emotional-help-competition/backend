@@ -9,11 +9,23 @@ With the help of simple psychological questionnaires, we can help define an emot
 If the user is worried that he feels a certain range of emotions and this interferes with the quality of his life,
 we will offer him simple tips to cope with emotions or work out his states in more detail using the services of our service.
 
-Java 11 Sprint Boot Maven application.
+# Java 11 Sprint Boot Maven application.
 
+# How to run the project
 
+* clone the repo and go to root folder
+* ``mvn clean build``
+* ``java -jar -Dspring.profiles.active=dev target/*.jar``
+
+Local server is going to deploy on 8080 port of localhost
+
+If you specify profile=prod, the application should start on MySql DB,
+
+else the application should start on h2 database by default (profile=dev)
+
+# Security scanning status
+[![CodeQL](https://github.com/emotional-help-competition/backend/actions/workflows/codeql.yml/badge.svg)](https://github.com/emotional-help-competition/backend/actions/workflows/codeql.yml)
 
 ## HTTPS
 
-### Self-signed certificate
 
