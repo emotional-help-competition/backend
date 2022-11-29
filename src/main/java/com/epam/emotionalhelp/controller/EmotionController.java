@@ -1,12 +1,12 @@
 package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.config.CORSConfig;
-import com.epam.emotionalhelp.controller.dto.QuestionRequestDto;
+import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
 import com.epam.emotionalhelp.controller.response.ResponseHandler;
 import com.epam.emotionalhelp.controller.response.ResponseMessage;
-import com.epam.emotionalhelp.mapper.QuestionMapper;
-import com.epam.emotionalhelp.model.Question;
-import com.epam.emotionalhelp.service.QuestionService;
+import com.epam.emotionalhelp.mapper.EmotionMapper;
+import com.epam.emotionalhelp.model.Emotion;
+import com.epam.emotionalhelp.service.EmotionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,55 +14,52 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
+import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
 import static com.epam.emotionalhelp.controller.util.QueryParam.JSON;
 
 @RestController
-@RequestMapping(path = QUESTIONS, produces = JSON)
+@RequestMapping(path = EMOTIONS, produces = JSON)
 @CrossOrigin(origins = CORSConfig.LOCALHOST)
 @RequiredArgsConstructor
-public class QuestionController {
-    private final QuestionService questionService;
+public class EmotionController {
+    private final EmotionService emotionService;
 
     @PostMapping
-    public ResponseEntity<Object> addQuestion(@RequestBody QuestionRequestDto questionRequestDto) {
-        Question question = questionService.addQuestion(questionRequestDto);
+    public ResponseEntity<Object> addEmotion(@RequestBody EmotionRequestDto emotionRequestDto) {
+        Emotion emotion = emotionService.addQuestion(emotionRequestDto);
         return ResponseHandler.
                 generateResponse(ResponseMessage.SUCCESSFULLY_CREATED,
                         HttpStatus.CREATED,
-                        QuestionMapper.toDto(question));
+                        EmotionMapper.toDto(emotion));
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAllQuestions(@RequestParam(required = false) String text, Pageable pageable) {
-        Page<Question> all = questionService.findAll(text, pageable);
+    public ResponseEntity<Object> findAllEmotions(Pageable pageable) {
+        Page<Emotion> all = emotionService.findAll(pageable);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.pageEntityToPageDto(all));
+                EmotionMapper.pageEntityToPageDto(all));
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findQuestionById(@PathVariable(value = "id") Long id) {
-        Question questionById = questionService.findById(id);
+    public ResponseEntity<Object> findEmotionById(@PathVariable(value = "id") Long id) {
+        Emotion byId = emotionService.findById(id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.toDto(questionById));
+                EmotionMapper.toDto(byId));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateQuestion(@RequestBody QuestionRequestDto questionRequestDto,
+    public ResponseEntity<Object> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                                  @PathVariable(value = "id") Long id) {
-        Question updateQuestion = questionService.updateQuestion(questionRequestDto, id);
+        Emotion updateEmotion = emotionService.updateQuestion(emotionRequestDto, id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_UPDATED,
-                HttpStatus.OK, QuestionMapper.toDto(updateQuestion));
+                    HttpStatus.OK, EmotionMapper.toDto(updateEmotion));
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteQuestionById(@PathVariable(value = "id") Long id) {
-        questionService.deleteQuestionById(id);
+        emotionService.deleteQuestionById(id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_DELETED, HttpStatus.NO_CONTENT);
     }
-
 }
