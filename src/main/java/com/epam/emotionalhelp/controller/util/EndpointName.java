@@ -9,5 +9,3 @@ public class EndpointName {
     public static final String QUIZ_RESULTS = "/v1/results";
     public static final String QUIZZES = "/v1/quizzes";
 }
-
-

@@ -1,10 +1,11 @@
 package com.epam.emotionalhelp.model;
 
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Set;
 
 import static com.epam.emotionalhelp.model.util.ColumnName.*;
@@ -15,16 +16,18 @@ import static com.epam.emotionalhelp.model.util.ColumnName.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = EMOTION_TABLE_NAME)
-@EntityListeners(AuditingEntityListener.class)
-public class Emotion {
+@Table(name = QUIZ_RESULT_TABLE_NAME)
+public class QuizResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = EMOTION_DESCRIPTION)
-    private String description;
+    @ManyToOne
+    @JoinColumn(name = QUIZ_RESULT_USER_ID)
+    private User user;
 
-    @OneToMany(mappedBy = "emotion")
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "quizResult")
     private Set<QuizResultEmotion> result;
 }
