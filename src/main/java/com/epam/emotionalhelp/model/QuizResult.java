@@ -5,8 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Set;
 
 import static com.epam.emotionalhelp.model.util.ColumnName.*;
 
@@ -24,11 +22,19 @@ public class QuizResult {
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Quiz quiz;
 
     @ManyToOne
     @JoinColumn(name = QUIZ_RESULT_USER_ID)
-    private User user;
+    private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "emotion_id")
+    private Emotion emotion;
+
+    private Integer score;
 
     private LocalDateTime createdAt;
 }
