@@ -1,8 +1,16 @@
 package com.epam.emotionalhelp.controller.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class CORSConfig {
-    public static final String LOCALHOST = "http://localhost:8080";
+@EnableWebMvc
+public class CORSConfig  implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("http://localhost:8080");
+    }
 }

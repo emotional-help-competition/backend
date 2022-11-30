@@ -1,20 +1,20 @@
 package com.epam.emotionalhelp.controller;
 
-import com.epam.emotionalhelp.controller.config.CORSConfig;
 import com.epam.emotionalhelp.model.Quiz;
 import com.epam.emotionalhelp.service.QuizService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.Optional;
 
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZZES;
-import static com.epam.emotionalhelp.controller.util.QueryParam.JSON;
 
 @RestController
-@RequestMapping(path = QUIZZES, produces = JSON)
-@CrossOrigin(origins = CORSConfig.LOCALHOST)
+@RequestMapping(path = QUIZZES)
 @RequiredArgsConstructor
 public class QuizController {
     private final QuizService quizService;

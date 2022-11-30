@@ -1,15 +1,35 @@
 package com.epam.emotionalhelp.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static com.epam.emotionalhelp.model.util.ColumnName.*;
+import static com.epam.emotionalhelp.model.util.ColumnName.LINK_QUESTION_ID;
+import static com.epam.emotionalhelp.model.util.ColumnName.LINK_QUIZ_ID;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_CREATE_DATE;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_DESCRIPTION;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_NAME;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_QUESTION;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_TABLE_NAME;
 
 @Builder
 @Getter
