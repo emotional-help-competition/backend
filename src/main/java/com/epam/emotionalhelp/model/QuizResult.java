@@ -23,11 +23,12 @@ public class QuizResult {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "quiz_id")
+    private Quiz quiz;
+
+    @ManyToOne
     @JoinColumn(name = QUIZ_RESULT_USER_ID)
     private User user;
 
     private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "quizResult")
-    private Set<QuizResultEmotion> result;
 }
