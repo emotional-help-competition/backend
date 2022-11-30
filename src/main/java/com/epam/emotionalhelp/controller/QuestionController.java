@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
+
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
 
 @RestController
@@ -30,8 +31,23 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
 public class QuestionController {
     private final QuestionService questionService;
 
+    @GetMapping
+    public ResponseEntity<Object> findAll(@RequestParam(required = false) String text, Pageable pageable) {
+        Page<Question> questions = questionService.findAll(text, pageable);
+        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
+                QuestionMapper.pageEntityToPageDto(questions));
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> findById(@PathVariable Long id) {
+        Question question = questionService.findById(id);
+        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
+                QuestionMapper.toDto(question));
+    }
+
     @PostMapping
-    public ResponseEntity<Object> addQuestion(@RequestBody QuestionRequestDto questionRequestDto) {
+    public ResponseEntity<Object> add(@RequestBody QuestionRequestDto questionRequestDto) {
         Question question = questionService.addQuestion(questionRequestDto);
         return ResponseHandler.
                 generateResponse(ResponseMessage.SUCCESSFULLY_CREATED,
@@ -39,24 +55,8 @@ public class QuestionController {
                         QuestionMapper.toDto(question));
     }
 
-    @GetMapping
-    public ResponseEntity<Object> findAllQuestions(@RequestParam(required = false) String text, Pageable pageable) {
-        Page<Question> all = questionService.findAll(text, pageable);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.pageEntityToPageDto(all));
-
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> findQuestionById(@PathVariable(value = "id") Long id) {
-        Question questionById = questionService.findById(id);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.toDto(questionById));
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateQuestion(@RequestBody QuestionRequestDto questionRequestDto,
-                                                 @PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody QuestionRequestDto questionRequestDto) {
         Question updateQuestion = questionService.updateQuestion(questionRequestDto, id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_UPDATED,
                 HttpStatus.OK, QuestionMapper.toDto(updateQuestion));
@@ -64,7 +64,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteQuestionById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         questionService.deleteQuestionById(id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_DELETED, HttpStatus.NO_CONTENT);
     }
