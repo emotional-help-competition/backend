@@ -1,11 +1,10 @@
-INSERT INTO emotion (description)
-VALUES ('angry');
-INSERT INTO emotion (description)
-VALUES ('sad');
-INSERT INTO emotion (description)
-VALUES ('happy');
-INSERT INTO emotion (description)
-VALUES ('anxious');
+INSERT INTO emotion (id, description)
+VALUES (1, 'joy'),
+       (2, 'surprise'),
+       (3, 'anger'),
+       (4, 'disgust'),
+       (5, 'fear'),
+       (6, 'sadness');
 
 
 INSERT INTO question (text, emotion_id)
@@ -39,3 +38,4 @@ INSERT INTO quiz_question (quiz_id, question_id)
 VALUES (2, 2);
 INSERT INTO quiz_question (quiz_id, question_id)
 VALUES (2, 4);
+
