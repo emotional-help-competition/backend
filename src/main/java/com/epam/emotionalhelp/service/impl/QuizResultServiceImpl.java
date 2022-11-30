@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class QuizResultServiceImpl implements QuizResultService {
     @Override
-    public Map<Long, Integer> calculateResult(List<EmotionDto> emotions) {
+    public Map<Long, Double> calculateResult(List<EmotionDto> emotions) {
         return emotions.stream()
                 .collect(Collectors.groupingBy(EmotionDto::getEmotionId, LinkedHashMap::new,
-                        Collectors.summingInt(EmotionDto::getValue)));
+                        Collectors.averagingInt(emotionDto -> emotionDto.getValue() * 20)));
     }
 }

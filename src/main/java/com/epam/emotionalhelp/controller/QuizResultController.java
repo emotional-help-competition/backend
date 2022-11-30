@@ -21,7 +21,7 @@ public class QuizResultController {
     private final QuizResultService quizResultService;
 
     @PostMapping
-    public Map<Long, Integer> calculateResult(@RequestBody @Valid List<EmotionDto> emotions) {
+    public Map<Long, Double> calculateResult(@RequestBody @Valid List<EmotionDto> emotions) {
         return quizResultService.calculateResult(emotions);
     }
 }
