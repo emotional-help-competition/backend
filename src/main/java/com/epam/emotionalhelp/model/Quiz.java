@@ -20,7 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 import static com.epam.emotionalhelp.model.util.ColumnName.LINK_QUESTION_ID;
@@ -53,7 +53,7 @@ public class Quiz {
     private String description;
 
     @Column(name = QUIZ_CREATE_DATE)
-    private LocalDateTime createDate;
+    private ZonedDateTime createDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = QUIZ_QUESTION,
