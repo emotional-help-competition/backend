@@ -28,8 +28,23 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
 public class EmotionController {
     private final EmotionService emotionService;
 
+    @GetMapping
+    public ResponseEntity<Object> findAll(Pageable pageable) {
+        Page<Emotion> emotions = emotionService.findAll(pageable);
+        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
+                EmotionMapper.pageEntityToPageDto(emotions));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> findById(@PathVariable Long id) {
+        Emotion emotion = emotionService.findById(id);
+        //    consider ResponseEntity.ok() builder
+        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
+                EmotionMapper.toDto(emotion));
+    }
+
     @PostMapping
-    public ResponseEntity<Object> addEmotion(@RequestBody EmotionRequestDto emotionRequestDto) {
+    public ResponseEntity<Object> create(@RequestBody EmotionRequestDto emotionRequestDto) {
         Emotion emotion = emotionService.addQuestion(emotionRequestDto);
         return ResponseHandler.
                 generateResponse(ResponseMessage.SUCCESSFULLY_CREATED,
@@ -37,32 +52,15 @@ public class EmotionController {
                         EmotionMapper.toDto(emotion));
     }
 
-    @GetMapping
-    public ResponseEntity<Object> findAllEmotions(Pageable pageable) {
-        Page<Emotion> all = emotionService.findAll(pageable);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                EmotionMapper.pageEntityToPageDto(all));
-
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> findEmotionById(@PathVariable(value = "id") Long id) {
-        Emotion byId = emotionService.findById(id);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                EmotionMapper.toDto(byId));
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
-                                                 @PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody EmotionRequestDto emotionRequestDto) {
         Emotion updateEmotion = emotionService.updateQuestion(emotionRequestDto, id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_UPDATED,
                     HttpStatus.OK, EmotionMapper.toDto(updateEmotion));
-
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteQuestionById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         emotionService.deleteQuestionById(id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_DELETED, HttpStatus.NO_CONTENT);
     }
