@@ -1,7 +1,5 @@
 package com.epam.emotionalhelp.controller.util;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

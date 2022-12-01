@@ -3,11 +3,12 @@ package com.epam.emotionalhelp.service.mapper;
 import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuizResponseDto;
 import com.epam.emotionalhelp.model.Quiz;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-
 import java.util.stream.Collectors;
 
+@UtilityClass
 public class QuizMapper {
     public static Quiz toEntity(QuizRequestDto quizRequestDto) {
         return Quiz.builder()
@@ -16,7 +17,6 @@ public class QuizMapper {
                 .questions(quizRequestDto.getQuestions())
                 .build();
     }
-
 
     public static QuizResponseDto toDto(Quiz quiz) {
         return QuizResponseDto.builder()

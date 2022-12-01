@@ -15,12 +15,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Set;
 
-import static com.epam.emotionalhelp.model.util.ColumnName.*;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_RESULT_TABLE_NAME;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_RESULT_USER_ID;
 
 @Builder
 @Getter

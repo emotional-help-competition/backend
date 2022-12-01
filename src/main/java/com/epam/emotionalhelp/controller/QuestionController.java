@@ -2,14 +2,12 @@ package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.config.CORSConfig;
 import com.epam.emotionalhelp.controller.dto.QuestionRequestDto;
-import com.epam.emotionalhelp.controller.response.ResponseHandler;
-import com.epam.emotionalhelp.controller.response.ResponseMessage;
+import com.epam.emotionalhelp.controller.dto.QuestionResponseDto;
 import com.epam.emotionalhelp.service.QuestionService;
-import com.epam.emotionalhelp.service.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,43 +30,29 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping
-    public ResponseEntity<Object> findAll( Pageable pageable) {
-        var questions = questionService.findAll(pageable);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.pageEntityToPageDto(questions));
-
+    public Page<QuestionResponseDto> findAll(Pageable pageable) {
+        return questionService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findById(@PathVariable Long id) {
-        var question = questionService.findById(id);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.toDto(question));
+    public QuestionResponseDto findById(@PathVariable Long id) {
+        return questionService.findById(id);
     }
 
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody QuestionRequestDto questionRequestDto) {
-        var question = questionService.addQuestion(questionRequestDto);
-        return ResponseHandler.
-                generateResponse(ResponseMessage.SUCCESSFULLY_CREATED,
-                        HttpStatus.CREATED,
-                        QuestionMapper.toDto(question));
+    public QuestionResponseDto create(@RequestBody QuestionRequestDto questionRequestDto) {
+        return questionService.create(questionRequestDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody QuestionRequestDto questionRequestDto) {
-        var updateQuestion = questionService.updateQuestion(id, questionRequestDto);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_UPDATED,
-                HttpStatus.OK, QuestionMapper.toDto(updateQuestion));
-
+    public QuestionResponseDto update(@PathVariable Long id, @RequestBody QuestionRequestDto questionRequestDto) {
+        return questionService.update(id, questionRequestDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
-        questionService.deleteQuestionById(id);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_DELETED, HttpStatus.NO_CONTENT);
+    public void delete(@PathVariable Long id) {
+        questionService.deleteById(id);
     }
-
 }

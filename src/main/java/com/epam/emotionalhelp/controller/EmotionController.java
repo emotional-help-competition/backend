@@ -2,13 +2,11 @@ package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.config.CORSConfig;
 import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
-import com.epam.emotionalhelp.controller.response.ResponseHandler;
-import com.epam.emotionalhelp.controller.response.ResponseMessage;
+import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
 import com.epam.emotionalhelp.service.EmotionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,40 +27,27 @@ public class EmotionController {
     private final EmotionService emotionService;
 
     @GetMapping
-    public ResponseEntity<Object> findAll(Pageable pageable) {
-        var emotions = emotionService.findAll(pageable);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                emotions);
-
+    public Page<EmotionResponseDto> findAll(Pageable pageable) {
+        return emotionService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findById(@PathVariable Long id) {
-        var emotion = emotionService.findById(id);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                emotion);
+    public EmotionResponseDto findById(@PathVariable Long id) {
+        return emotionService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody EmotionRequestDto emotionRequestDto) {
-        var emotion = emotionService.addEmotion(emotionRequestDto);
-        return ResponseHandler.
-                generateResponse(ResponseMessage.SUCCESSFULLY_CREATED,
-                        HttpStatus.CREATED,
-                        emotion);
+    public EmotionResponseDto create(@RequestBody EmotionRequestDto emotionRequestDto) {
+        return emotionService.create(emotionRequestDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody EmotionRequestDto emotionRequestDto) {
-        var updateEmotion = emotionService.updateQuestion(id, emotionRequestDto);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_UPDATED,
-                HttpStatus.OK, updateEmotion);
-
+    public EmotionResponseDto update(@PathVariable Long id, @RequestBody EmotionRequestDto emotionRequestDto) {
+        return emotionService.update(id, emotionRequestDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
-        emotionService.deleteQuestionById(id);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_DELETED, HttpStatus.NO_CONTENT);
+    public void delete(@PathVariable Long id) {
+        emotionService.deleteById(id);
     }
 }
