@@ -1,11 +1,11 @@
 package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.config.CORSConfig;
-import com.epam.emotionalhelp.controller.dto.QuestionRequestDto;
+import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
 import com.epam.emotionalhelp.controller.response.ResponseHandler;
 import com.epam.emotionalhelp.controller.response.ResponseMessage;
-import com.epam.emotionalhelp.service.QuestionService;
-import com.epam.emotionalhelp.service.mapper.QuestionMapper;
+import com.epam.emotionalhelp.service.QuizService;
+import com.epam.emotionalhelp.service.mapper.QuizMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,56 +18,52 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
-
+import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ;
 
 @RestController
-@RequestMapping(path = QUESTIONS)
+@RequestMapping(path = QUIZ)
 @CrossOrigin(origins = CORSConfig.LOCALHOST)
 @RequiredArgsConstructor
-public class QuestionController {
-    private final QuestionService questionService;
-
+public class QuizController {
+    private final QuizService quizService;
     @GetMapping
-    public ResponseEntity<Object> findAll( Pageable pageable) {
-        var questions = questionService.findAll(pageable);
+    public ResponseEntity<Object> findAll(Pageable pageable) {
+        var quizzes = quizService.findAll(pageable);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.pageEntityToPageDto(questions));
+                QuizMapper.pageEntityToPageDto(quizzes));
+
 
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findById(@PathVariable Long id) {
-        var question = questionService.findById(id);
+        var quiz = quizService.findById(id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.toDto(question));
+                QuizMapper.toDto(quiz));
     }
 
-
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody QuestionRequestDto questionRequestDto) {
-        var question = questionService.addQuestion(questionRequestDto);
+    public ResponseEntity<Object> create(@RequestBody QuizRequestDto quizRequestDto) {
+        var quiz = quizService.addQuiz(quizRequestDto);
         return ResponseHandler.
                 generateResponse(ResponseMessage.SUCCESSFULLY_CREATED,
                         HttpStatus.CREATED,
-                        QuestionMapper.toDto(question));
+                        QuizMapper.toDto(quiz));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody QuestionRequestDto questionRequestDto) {
-        var updateQuestion = questionService.updateQuestion(id, questionRequestDto);
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody QuizRequestDto quizRequestDto) {
+        var quiz = quizService.updateQuiz(id, quizRequestDto);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_UPDATED,
-                HttpStatus.OK, QuestionMapper.toDto(updateQuestion));
+                HttpStatus.OK, QuizMapper.toDto(quiz));
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
-        questionService.deleteQuestionById(id);
+        quizService.deleteQuizById(id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_DELETED, HttpStatus.NO_CONTENT);
     }
 

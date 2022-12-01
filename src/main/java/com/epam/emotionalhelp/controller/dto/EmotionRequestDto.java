@@ -2,13 +2,11 @@ package com.epam.emotionalhelp.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@Data
+@Value
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class EmotionRequestDto {
-    private String description;
+     String description;
 }

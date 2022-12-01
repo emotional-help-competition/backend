@@ -1,9 +1,10 @@
 package com.epam.emotionalhelp.controller.dto;
 
 import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class EmotionDto {
-    private Long emotionId;
-    private Integer value;
+    Long emotionId;
+    Integer value;
 }

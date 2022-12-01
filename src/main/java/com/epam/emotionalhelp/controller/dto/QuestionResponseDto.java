@@ -5,13 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@Data
+@Value
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class QuestionResponseDto {
-    private Long id;
-    private String text;
-    private Emotion emotion;
+    Long id;
+    String text;
+    Emotion emotion;
 }

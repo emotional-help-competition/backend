@@ -2,8 +2,9 @@ package com.epam.emotionalhelp.model.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class ColumnName {
 
     //QUIZ table
