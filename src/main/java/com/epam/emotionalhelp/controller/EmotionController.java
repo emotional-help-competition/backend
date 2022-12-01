@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
-
+import static com.epam.emotionalhelp.controller.util.QueryParam.JSON;
 
 @RestController
 @RequestMapping(path = EMOTIONS)
