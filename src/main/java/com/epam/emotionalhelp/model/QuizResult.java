@@ -3,6 +3,8 @@ package com.epam.emotionalhelp.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -34,7 +36,9 @@ public class QuizResult {
     @JoinColumn(name = "emotion_id")
     private Emotion emotion;
 
+    @NotNull
     private Integer score;
 
+    @NotNull
     private LocalDateTime createdAt;
 }

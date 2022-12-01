@@ -12,7 +12,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
 
@@ -39,7 +50,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> add(@RequestBody QuestionRequestDto questionRequestDto) {
+    public ResponseEntity<Object> add(@RequestBody @Valid QuestionRequestDto questionRequestDto) {
         Question question = questionService.addQuestion(questionRequestDto);
         return ResponseHandler.
                 generateResponse(ResponseMessage.SUCCESSFULLY_CREATED,
@@ -48,7 +59,8 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody QuestionRequestDto questionRequestDto) {
+    public ResponseEntity<Object> update(@PathVariable Long id,
+                                         @RequestBody @Valid QuestionRequestDto questionRequestDto) {
         Question updateQuestion = questionService.updateQuestion(questionRequestDto, id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_UPDATED,
                 HttpStatus.OK, QuestionMapper.toDto(updateQuestion));

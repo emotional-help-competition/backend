@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
-import static com.epam.emotionalhelp.controller.util.QueryParam.JSON;
 
 @RestController
 @RequestMapping(EMOTIONS)
@@ -48,7 +49,7 @@ public class EmotionController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody EmotionRequestDto emotionRequestDto) {
+    public ResponseEntity<Object> create(@RequestBody @Valid EmotionRequestDto emotionRequestDto) {
         Emotion emotion = emotionService.addQuestion(emotionRequestDto);
         return ResponseHandler.
                 generateResponse(ResponseMessage.SUCCESSFULLY_CREATED,
@@ -57,7 +58,8 @@ public class EmotionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody EmotionRequestDto emotionRequestDto) {
+    public ResponseEntity<Object> update(@PathVariable Long id,
+                                         @RequestBody @Valid EmotionRequestDto emotionRequestDto) {
         Emotion updateEmotion = emotionService.updateQuestion(emotionRequestDto, id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_UPDATED,
                     HttpStatus.OK, EmotionMapper.toDto(updateEmotion));

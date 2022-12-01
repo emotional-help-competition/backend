@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
@@ -40,13 +41,16 @@ public class Quiz {
 
     @NotNull
     @Column(name = QUIZ_NAME)
+    @NotBlank
     private String name;
 
     @NotNull
     @Column(name = QUIZ_DESCRIPTION)
+    @NotBlank
     private String description;
 
     @Column(name = QUIZ_CREATE_DATE)
+    @NotNull
     private ZonedDateTime createDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
