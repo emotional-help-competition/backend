@@ -51,6 +51,7 @@ public class QuestionController {
         return questionService.update(id, questionRequestDto);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         questionService.deleteById(id);
