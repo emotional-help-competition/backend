@@ -13,10 +13,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QuizResultServiceImpl implements QuizResultService {
+    private static final int percentCoefficient = 20;
+
     @Override
     public Map<Long, Double> calculateResult(List<EmotionDto> emotions) {
         return emotions.stream()
                 .collect(Collectors.groupingBy(EmotionDto::getEmotionId, LinkedHashMap::new,
-                        Collectors.averagingInt(emotionDto -> emotionDto.getValue() * 20)));
+                        Collectors.averagingInt(emotionDto -> emotionDto.getValue() * percentCoefficient)));
     }
 }

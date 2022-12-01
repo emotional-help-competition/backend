@@ -1,6 +1,10 @@
 package com.epam.emotionalhelp.model;
 
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
@@ -15,10 +19,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import static com.epam.emotionalhelp.model.util.ColumnName.*;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUESTION_EMOTION_ID;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUESTION_TABLE_NAME;
+import static com.epam.emotionalhelp.model.util.ColumnName.QUESTION_TEXT;
 
 
-@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -38,4 +43,9 @@ public class Question {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = QUESTION_EMOTION_ID, nullable = false)
     private Emotion emotion;
+
+    public Question(String text, Emotion emotion){
+        this.text = text;
+        this.emotion = emotion;
+    }
 }

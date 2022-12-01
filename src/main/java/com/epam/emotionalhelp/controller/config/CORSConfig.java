@@ -1,8 +1,8 @@
 package com.epam.emotionalhelp.controller.config;
 
-import org.springframework.context.annotation.Configuration;
+import lombok.experimental.UtilityClass;
 
-@Configuration
+@UtilityClass
 public class CORSConfig {
-    public static final String LOCALHOST = "http://localhost:8080";
+    public static final String LOCALHOST = "http://localhost:*";
 }
