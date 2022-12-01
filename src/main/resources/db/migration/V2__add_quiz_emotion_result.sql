@@ -4,7 +4,7 @@ create table quiz (
     id int auto_increment primary key,
     name nvarchar(32),
     description nvarchar(32),
-    created_at timestamp
+    created_at datetime
 );
 
 create table emotion(
