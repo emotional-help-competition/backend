@@ -43,15 +43,11 @@ public class QuizServiceImpl implements QuizService {
         if (quizRequestDto.getDescription() != null) {
             quiz.setDescription(quizRequestDto.getDescription());
         }
-        if (quizRequestDto.getCreateDate() != null) {
-            quiz.setCreateDate(quizRequestDto.getCreateDate());
-        }
         if (quizRequestDto.getQuestions() != null) {
             quiz.setQuestions(quizRequestDto.getQuestions());
         }
         return quizRepository.save(quiz);
     }
-    @Transactional(readOnly = true)
     @Override
     public void deleteQuizById(Long id) {
         var quiz = quizRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));

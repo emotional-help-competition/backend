@@ -35,14 +35,11 @@ public class Emotion {
     @Column(name = EMOTION_DESCRIPTION)
     private String description;
 
-    @OneToMany(mappedBy = "emotion")
-    private Set<QuizResultEmotion> result;
+//    @OneToMany(mappedBy = "emotion")
+//    private Set<QuizResultEmotion> result;
 
     public Emotion(String description){
         this.description = description;
     }
-    public Emotion(Long id, String description){
-        this.id = id;
-        this.description = description;
-    }
+
 }

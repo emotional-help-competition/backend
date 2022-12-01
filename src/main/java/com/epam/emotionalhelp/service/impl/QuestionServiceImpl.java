@@ -37,7 +37,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public Question updateQuestion(Long id, QuestionRequestDto questionRequestDto) {
         var question = questionRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
@@ -50,7 +50,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         return questionRepository.save(question);
     }
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void deleteQuestionById(Long id) {
         var question = questionRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));

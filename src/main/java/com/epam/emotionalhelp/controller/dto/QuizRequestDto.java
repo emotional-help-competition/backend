@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
-import java.time.ZonedDateTime;
 import java.util.Set;
 
 @Value
@@ -14,6 +13,5 @@ import java.util.Set;
 public class QuizRequestDto {
      String name;
      String description;
-     ZonedDateTime createDate;
      Set<Question> questions;
 }

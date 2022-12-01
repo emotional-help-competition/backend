@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +54,7 @@ public class QuizController {
                         HttpStatus.CREATED,
                         QuizMapper.toDto(quiz));
     }
-
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @PatchMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody QuizRequestDto quizRequestDto) {
         var quiz = quizService.updateQuiz(id, quizRequestDto);
@@ -60,7 +62,7 @@ public class QuizController {
                 HttpStatus.OK, QuizMapper.toDto(quiz));
 
     }
-
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         quizService.deleteQuizById(id);

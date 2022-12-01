@@ -36,7 +36,7 @@ public class EmotionServiceImpl implements EmotionService {
     }
 
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public EmotionResponseDto updateQuestion(Long id, EmotionRequestDto emotionRequestDto) {
         var emotion = emotionRepository.findById(id).orElseThrow(() ->
@@ -48,7 +48,7 @@ public class EmotionServiceImpl implements EmotionService {
         return EmotionMapper.toDto(emotionRepository.save(emotion));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void deleteQuestionById(Long id) {
         var emotion = emotionRepository.findById(id).orElseThrow(() ->

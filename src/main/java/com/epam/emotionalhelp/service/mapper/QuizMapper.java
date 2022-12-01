@@ -13,7 +13,6 @@ public class QuizMapper {
         return Quiz.builder()
                 .name(quizRequestDto.getName())
                 .description(quizRequestDto.getDescription())
-                .createDate(quizRequestDto.getCreateDate())
                 .questions(quizRequestDto.getQuestions())
                 .build();
     }
