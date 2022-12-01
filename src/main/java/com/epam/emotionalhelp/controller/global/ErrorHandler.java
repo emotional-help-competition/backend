@@ -1,5 +1,6 @@
 package com.epam.emotionalhelp.controller.global;
 
+import com.epam.emotionalhelp.exception.NoAccessException;
 import com.epam.emotionalhelp.exception.NotAuthorizedException;
 import com.epam.emotionalhelp.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
+import java.rmi.AccessException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -40,7 +42,7 @@ public class ErrorHandler {
         String message = e.getMessage() == null
                 ? e.getClass().getSimpleName()
                 : e.getMessage();
-        return Map.of("code", "404",
+        return Map.of("code", "400",
                 "message", message);
     }
 
@@ -49,5 +51,12 @@ public class ErrorHandler {
     public Map<String, String> notAuthorized() {
         return Map.of("code", "401",
                 "message", "You are not authorized");
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(NoAccessException.class)
+    public Map<String, String> noAccess() {
+        return Map.of("code", "403",
+                "message", "You have no access");
     }
 }
