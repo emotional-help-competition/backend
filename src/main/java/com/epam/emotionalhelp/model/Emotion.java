@@ -35,7 +35,4 @@ public class Emotion {
 
     @Column(name = EMOTION_DESCRIPTION)
     private String description;
-
-    @OneToMany(mappedBy = "emotion")
-    private Set<QuizResultEmotion> result;
 }
