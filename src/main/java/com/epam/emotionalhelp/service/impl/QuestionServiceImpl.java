@@ -1,15 +1,19 @@
 package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.QuestionRequestDto;
-import com.epam.emotionalhelp.mapper.QuestionMapper;
+import com.epam.emotionalhelp.controller.dto.QuestionResponseDto;
+import com.epam.emotionalhelp.controller.response.ResponseMessage;
+import com.epam.emotionalhelp.exceptionhandler.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Question;
+import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.repository.QuestionRepository;
 import com.epam.emotionalhelp.service.QuestionService;
+import com.epam.emotionalhelp.service.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -17,26 +21,31 @@ import org.springframework.stereotype.Service;
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final EmotionRepository emotionRepository;
 
     @Override
-    public Page<Question> findAll(String text, Pageable pageable) {
-       return questionRepository.findAll(text, pageable);
+    public Page<QuestionResponseDto> findAll(Pageable pageable) {
+       return QuestionMapper.pageEntityToPageDto(questionRepository.findAll(pageable));
     }
 
     @Override
-    public Question addQuestion(QuestionRequestDto questionRequestDto) {
-        return questionRepository.save(QuestionMapper.toEntity(questionRequestDto));
+    public QuestionResponseDto findById(Long id) {
+        return QuestionMapper.toDto(findQuestionById(id));
     }
 
-    @Override
-    public Question findById(Long id) {
-        return questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
+    @Override
+    public QuestionResponseDto create(QuestionRequestDto questionRequestDto) {
+        var emotion = emotionRepository.findById(questionRequestDto.getEmotion().getId()).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
+        var question = QuestionMapper.toEntity(questionRequestDto);
+        question.setEmotion(emotion);
+        return QuestionMapper.toDto(questionRepository.save(question));
     }
 
+    @Transactional
     @Override
-    public Question updateQuestion(QuestionRequestDto questionRequestDto, Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    public QuestionResponseDto update(Long id, QuestionRequestDto questionRequestDto) {
+        var question = findQuestionById(id);
         if (questionRequestDto.getText() != null) {
             question.setText(questionRequestDto.getText());
         }
@@ -44,14 +53,18 @@ public class QuestionServiceImpl implements QuestionService {
             question.setEmotion(questionRequestDto.getEmotion());
         }
 
-        return questionRepository.save(question);
+        return QuestionMapper.toDto(questionRepository.save(question));
     }
 
+    @Transactional
     @Override
-    public void deleteQuestionById(Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(IllegalAccessError::new);
+    public void deleteById(Long id) {
+        var question = findQuestionById(id);
         questionRepository.delete(question);
+    }
 
+    private Question findQuestionById(Long id){
+        return questionRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
     }
 }
 
