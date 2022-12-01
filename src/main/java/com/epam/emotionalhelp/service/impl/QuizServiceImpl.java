@@ -20,7 +20,12 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public Optional<Quiz> findById(Long id) {
-        return quizRepository.findById(id);
+    public Quiz findById(Long id) {
+        Optional<Quiz> quizOptional = quizRepository.findById(id);
+        Quiz quiz = new Quiz();
+        if (quizOptional.isPresent()) {
+            quiz = quizOptional.get();
+        }
+        return quiz;
     }
 }

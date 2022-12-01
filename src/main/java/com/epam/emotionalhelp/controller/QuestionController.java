@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
 
-import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
+import static com.epam.emotionalhelp.controller.util.EndpointName.*;
 
 @RestController
 @RequestMapping(path = QUESTIONS)
@@ -32,8 +31,8 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping
-    public ResponseEntity<Object> findAll(@RequestParam(required = false) String text, Pageable pageable) {
-        Page<Question> questions = questionService.findAll(text, pageable);
+    public ResponseEntity<Object> findAll( Pageable pageable) {
+        Page<Question> questions = questionService.findAll( pageable);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
                 QuestionMapper.pageEntityToPageDto(questions));
 

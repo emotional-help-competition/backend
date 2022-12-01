@@ -1,9 +1,9 @@
 package com.epam.emotionalhelp.controller.dto;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class AnswerDto {
-    private Long emotionId;
-    private Integer score;
+    Long emotionId;
+    Integer score;
 }

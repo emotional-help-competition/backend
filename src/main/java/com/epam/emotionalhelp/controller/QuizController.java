@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.Optional;
 
-import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZZES;
+import static com.epam.emotionalhelp.controller.util.EndpointName.*;
 
 @RestController
 @RequestMapping(path = QUIZZES)
@@ -26,11 +25,6 @@ public class QuizController {
 
     @GetMapping("/{id}")
     public Quiz findById(@PathVariable Long id) {
-        Optional<Quiz> quizOptional = quizService.findById(id);
-        Quiz quiz = new Quiz();
-        if (quizOptional.isPresent()) {
-            quiz = quizOptional.get();
-        }
-        return quiz;
+        return quizService.findById(id);
     }
 }

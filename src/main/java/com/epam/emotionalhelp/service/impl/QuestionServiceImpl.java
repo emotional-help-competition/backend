@@ -19,8 +19,8 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
 
     @Override
-    public Page<Question> findAll(String text, Pageable pageable) {
-       return questionRepository.findAll(text, pageable);
+    public Page<Question> findAll( Pageable pageable) {
+       return questionRepository.findAll( pageable);
     }
 
     @Override
