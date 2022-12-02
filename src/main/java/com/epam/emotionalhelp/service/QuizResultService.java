@@ -6,5 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface QuizResultService {
-    Map<Long, Double> calculateResult(List<EmotionDto> emotions);
+    void create(List<EmotionDto> emotions);
+    Map<Long, Double> findAll(Long resultId);
 }
