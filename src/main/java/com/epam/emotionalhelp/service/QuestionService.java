@@ -1,9 +1,19 @@
 package com.epam.emotionalhelp.service;
 
-import com.epam.emotionalhelp.module.Question;
+import com.epam.emotionalhelp.controller.dto.QuestionRequestDto;
+import com.epam.emotionalhelp.controller.dto.QuestionResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.Collection;
 
 public interface QuestionService {
-    Collection<Question> findAll();
+    Page<QuestionResponseDto> findAll(Pageable pageable);
+
+    QuestionResponseDto create(QuestionRequestDto questionRequestDto);
+
+    QuestionResponseDto findById(Long id);
+
+    QuestionResponseDto update(Long id, QuestionRequestDto questionRequestDto);
+
+    void deleteById(Long id);
 }
