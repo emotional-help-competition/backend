@@ -2,10 +2,7 @@ package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.config.CORSConfig;
 import com.epam.emotionalhelp.controller.dto.QuestionRequestDto;
-import com.epam.emotionalhelp.controller.response.ResponseHandler;
-import com.epam.emotionalhelp.controller.response.ResponseMessage;
-import com.epam.emotionalhelp.mapper.QuestionMapper;
-import com.epam.emotionalhelp.model.Question;
+import com.epam.emotionalhelp.controller.dto.QuestionResponseDto;
 import com.epam.emotionalhelp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,30 +22,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
 
+
 @RestController
-@RequestMapping(QUESTIONS)
+@RequestMapping(path = QUESTIONS)
 @CrossOrigin(origins = CORSConfig.LOCALHOST)
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping
-    public ResponseEntity<Object> findAll(@RequestParam(required = false) String text, Pageable pageable) {
-        Page<Question> questions = questionService.findAll(text, pageable);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.pageEntityToPageDto(questions));
-
+    public Page<QuestionResponseDto> findAll(Pageable pageable) {
+        return questionService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findById(@PathVariable Long id) {
-        Question question = questionService.findById(id);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_RECEIVED, HttpStatus.OK,
-                QuestionMapper.toDto(question));
+    public QuestionResponseDto findById(@PathVariable Long id) {
+        return questionService.findById(id);
     }
 
+
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody @Valid QuestionRequestDto questionRequestDto) {
         Question question = questionService.addQuestion(questionRequestDto);
@@ -64,13 +60,12 @@ public class QuestionController {
         Question updateQuestion = questionService.updateQuestion(questionRequestDto, id);
         return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_UPDATED,
                 HttpStatus.OK, QuestionMapper.toDto(updateQuestion));
-
     }
 
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
-        questionService.deleteQuestionById(id);
-        return ResponseHandler.generateResponse(ResponseMessage.SUCCESSFULLY_DELETED, HttpStatus.NO_CONTENT);
+    public void delete(@PathVariable Long id) {
+        questionService.deleteById(id);
     }
-
 }

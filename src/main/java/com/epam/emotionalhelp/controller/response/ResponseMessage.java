@@ -1,12 +1,9 @@
 package com.epam.emotionalhelp.controller.response;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ResponseMessage {
-    public static final String SUCCESSFULLY_CREATED = "Successfully created data!";
-    public static final String SUCCESSFULLY_RECEIVED = "Successfully received data!";
-    public static final String SUCCESSFULLY_UPDATED = "Successfully updated data!";
-    public static final String SUCCESSFULLY_DELETED = "Successfully deleted data!";
-}
+    @UtilityClass
+    public final class ResponseMessage {
+        public static final String RESOURCE_NOT_FOUND = "Resource not found!";
+    }
+
