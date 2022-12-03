@@ -1,6 +1,5 @@
 package com.epam.emotionalhelp.controller;
 
-import com.epam.emotionalhelp.controller.config.CORSConfig;
 import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuizResponseDto;
 import com.epam.emotionalhelp.service.QuizService;
@@ -8,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,7 +21,6 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ;
 
 @RestController
 @RequestMapping(path = QUIZ)
-@CrossOrigin(origins = CORSConfig.LOCALHOST)
 @RequiredArgsConstructor
 public class QuizController {
     private final QuizService quizService;
