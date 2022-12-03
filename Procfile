@@ -1,0 +1,1 @@
+web: java $JAVA_TOOL_OPTIONS -jar target/*.jar
