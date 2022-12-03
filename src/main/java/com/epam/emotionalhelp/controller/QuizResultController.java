@@ -5,12 +5,7 @@ import com.epam.emotionalhelp.controller.dto.EmotionDto;
 import com.epam.emotionalhelp.service.QuizResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
@@ -27,8 +22,8 @@ public class QuizResultController {
     private final QuizResultService quizResultService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public Map<Long, Integer> create(@RequestBody @Valid List<EmotionDto> emotions) {
-        return quizResultService.calculateResult(emotions);
+    @PostMapping("/{id}")
+    public Map<Long, Integer> create(@PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
+        return quizResultService.calculateResult(id, emotions);
     }
 }

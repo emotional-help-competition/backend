@@ -32,4 +32,7 @@ public final class ColumnName {
     //QUIZ_RESULT table
     public static final String QUIZ_RESULT_TABLE_NAME = "quiz_result";
     public static final String QUIZ_RESULT_USER_ID = "user_id";
+
+    //QUIZ_ATTEMPT table
+    public static final String QUIZ_ATTEMPT_TABLE_NAME = "quiz_attempt";
 }
