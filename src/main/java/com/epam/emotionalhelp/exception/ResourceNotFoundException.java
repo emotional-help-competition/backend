@@ -1,23 +1,22 @@
 package com.epam.emotionalhelp.exception;
 
+import lombok.NonNull;
+
 public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException() {
+    private final Type type;
+
+    public enum Type {
+        QUIZ_NOT_FOUND,
+        QUESTION_NOT_FOUND,
+        EMOTION_NOT_FOUND
+    }
+
+    public ResourceNotFoundException(@NonNull Type type) {
         super();
+        this.type = type;
     }
 
-    public ResourceNotFoundException(String message) {
-        super(message);
-    }
-
-    public ResourceNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ResourceNotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    protected ResourceNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public Type getType() {
+        return type;
     }
 }
