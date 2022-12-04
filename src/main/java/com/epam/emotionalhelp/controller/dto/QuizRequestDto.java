@@ -2,14 +2,14 @@ package com.epam.emotionalhelp.controller.dto;
 
 import com.epam.emotionalhelp.model.Question;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 import java.util.Set;
 
-@Value
+@Data
 @Builder
 public class QuizRequestDto {
-    String name;
-    String description;
-    Set<Question> questions;
+    private String name;
+    private String description;
+    private Set<Question> questions;
 }
