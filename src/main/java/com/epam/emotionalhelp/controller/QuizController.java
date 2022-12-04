@@ -1,9 +1,9 @@
 package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.config.CORSConfig;
-import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
-import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
-import com.epam.emotionalhelp.service.EmotionService;
+import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
+import com.epam.emotionalhelp.controller.dto.QuizResponseDto;
+import com.epam.emotionalhelp.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,37 +22,39 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Min;
 
-import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
+import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ;
 
 @RestController
-@RequestMapping(path = EMOTIONS)
+@RequestMapping(path = QUIZ)
 @CrossOrigin(origins = CORSConfig.LOCALHOST)
 @RequiredArgsConstructor
 @Validated
-public class EmotionController {
-    private final EmotionService emotionService;
-
+public class QuizController {
+    private final QuizService quizService;
     @GetMapping
-    public Page<EmotionResponseDto> findAll(Pageable pageable) {
-        return emotionService.findAll(pageable);
+    public Page<QuizResponseDto> findAll(Pageable pageable) {
+        return quizService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    public EmotionResponseDto findById(@Min(1) @PathVariable Long id) {
-        return emotionService.findById(id);
+    public QuizResponseDto findById(@Min(1) @PathVariable Long id) {
+        return quizService.findById(id);
     }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public EmotionResponseDto create(@RequestBody EmotionRequestDto emotionRequestDto) {
-        return emotionService.create(emotionRequestDto);
+    public QuizResponseDto create(@RequestBody QuizRequestDto quizRequestDto) {
+        return quizService.create(quizRequestDto);
     }
+
     @PatchMapping("/{id}")
-    public EmotionResponseDto update(@Min(1) @PathVariable Long id, @RequestBody EmotionRequestDto emotionRequestDto) {
-        return emotionService.update(id, emotionRequestDto);
+    public QuizResponseDto update(@Min(1) @PathVariable Long id, @RequestBody QuizRequestDto quizRequestDto) {
+        return quizService.update(id, quizRequestDto);
     }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@Min(1) @PathVariable Long id) {
-        emotionService.deleteById(id);
+        quizService.deleteById(id);
     }
 }

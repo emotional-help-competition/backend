@@ -1,17 +1,17 @@
 package com.epam.emotionalhelp.service;
 
 import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
-import com.epam.emotionalhelp.model.Emotion;
+import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface EmotionService {
-    Page<Emotion> findAll(Pageable pageable);
-    Emotion addQuestion(EmotionRequestDto emotionRequestDto);
+    Page<EmotionResponseDto> findAll(Pageable pageable);
+    EmotionResponseDto findById(Long id);
 
-    Emotion findById(Long id);
+    EmotionResponseDto create(EmotionRequestDto emotionRequestDto);
 
-    Emotion updateQuestion(EmotionRequestDto emotionRequestDto, Long id);
+    EmotionResponseDto update(Long id, EmotionRequestDto emotionRequestDto);
 
-    void deleteQuestionById(Long id);
+    void deleteById(Long id);
 }
