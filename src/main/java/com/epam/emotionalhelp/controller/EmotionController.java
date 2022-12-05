@@ -1,6 +1,5 @@
 package com.epam.emotionalhelp.controller;
 
-import com.epam.emotionalhelp.controller.config.CORSConfig;
 import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
 import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
 import com.epam.emotionalhelp.model.Emotion;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,7 +27,6 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
 
 @RestController
 @RequestMapping(path = EMOTIONS)
-@CrossOrigin(origins = CORSConfig.LOCALHOST)
 @RequiredArgsConstructor
 public class EmotionController {
     private final EmotionService emotionService;
