@@ -21,6 +21,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -42,10 +43,12 @@ public class Quiz {
 
     @NotNull
     @Column(name = QUIZ_NAME)
+    @Size(max = 30)
     private String name;
 
     @NotNull
     @Column(name = QUIZ_DESCRIPTION)
+    @Size(max = 120)
     private String description;
 
     @Column(name = QUIZ_CREATE_DATE)
