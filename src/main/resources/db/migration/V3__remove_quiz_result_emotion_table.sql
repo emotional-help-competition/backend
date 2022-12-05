@@ -19,3 +19,12 @@ create table quiz_result
     foreign key (attempt_id) references quiz_attempt (id),
     foreign key (emotion_id) references emotion (id)
 );
+
+create table category
+(
+    id          int auto_increment primary key,
+    emotion_id  int,
+    description nvarchar(32),
+    weight      int,
+    foreign key (emotion_id) references emotion (id)
+)

@@ -35,4 +35,11 @@ public final class ColumnName {
 
     //QUIZ_ATTEMPT table
     public static final String QUIZ_ATTEMPT_TABLE_NAME = "quiz_attempt";
+    public static final String QUIZ_ATTEMPT_ID = "attempt_id";
+
+    //CATEGORY table
+    public static final String CATEGORY_TABLE_NAME = "category";
+    public static final String CATEGORY_EMOTION_ID = "emotion_id";
+    public static final String CATEGORY_DESCRIPTION = "description";
+    public static final String CATEGORY_WEIGHT = "weight";
 }
