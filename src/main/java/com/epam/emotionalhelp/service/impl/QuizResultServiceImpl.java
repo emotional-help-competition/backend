@@ -12,11 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,24 +23,26 @@ public class QuizResultServiceImpl implements QuizResultService {
     private final QuizAttemptRepository quizAttemptRepository;
 
     @Override
-    public Map<Long, Integer> calculateResult(Long id, List<EmotionDto> emotions) {
+    public void calculateResult(Long quizId, List<EmotionDto> emotions) {
         //Create QuizResult object
         QuizResult quizResult = new QuizResult();
         //Set an id from the path variable
-        Optional<Quiz> quiz = quizRepository.findById(id);
+        Optional<Quiz> quiz = quizRepository.findById(quizId);
         quiz.ifPresent(quizResult::setQuiz);
         //Create QuizAttempt object
         QuizAttempt quizAttempt = new QuizAttempt();
         quizAttempt.setCreateDate(LocalDateTime.now());
         QuizAttempt quizAttemptFinal = quizAttemptRepository.save(quizAttempt);
         quizResult.setAttempt(quizAttemptFinal);
+        //
+        for (EmotionDto emotionDto : emotions) {
+
+        }
+
 
         //Stream<EmotionDto> stream = emotions.stream().map();
 
         quizResultRepository.save(quizResult);
 
-        return emotions.stream()
-                .collect(Collectors.groupingBy(EmotionDto::getEmotionId, LinkedHashMap::new,
-                        Collectors.summingInt(EmotionDto::getValue)));
     }
 }
