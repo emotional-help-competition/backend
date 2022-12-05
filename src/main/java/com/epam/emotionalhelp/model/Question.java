@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import static com.epam.emotionalhelp.model.util.ColumnName.QUESTION_EMOTION_ID;
 import static com.epam.emotionalhelp.model.util.ColumnName.QUESTION_TABLE_NAME;
@@ -40,13 +41,14 @@ public class Question {
     @NotNull
     @Column(name = QUESTION_TEXT)
     @NotBlank
+    @Size(max = 120)
     private String text;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = QUESTION_EMOTION_ID, nullable = false)
     private Emotion emotion;
 
-    public Question(String text, Emotion emotion){
+    public Question(String text, Emotion emotion) {
         this.text = text;
         this.emotion = emotion;
     }
