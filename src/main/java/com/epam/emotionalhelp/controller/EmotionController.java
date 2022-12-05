@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Min;
+
 import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
 
 @RestController
 @RequestMapping(path = EMOTIONS)
 @RequiredArgsConstructor
+@Validated
 public class EmotionController {
     private final EmotionService emotionService;
 
@@ -53,7 +58,7 @@ public class EmotionController {
             @ApiResponse(responseCode = "404", description = "Emotion not found",
                     content = @Content)})
     @GetMapping("/{id}")
-    public EmotionResponseDto findById(@PathVariable Long id) {
+    public EmotionResponseDto findById(@Min(1) @PathVariable Long id) {
         return emotionService.findById(id);
     }
 
@@ -79,7 +84,7 @@ public class EmotionController {
                     content = @Content),
     })
     @PatchMapping("/{id}")
-    public EmotionResponseDto update(@PathVariable Long id, @RequestBody EmotionRequestDto emotionRequestDto) {
+    public EmotionResponseDto update(@Min(1) @PathVariable Long id, @RequestBody EmotionRequestDto emotionRequestDto) {
         return emotionService.update(id, emotionRequestDto);
     }
 
@@ -93,7 +98,7 @@ public class EmotionController {
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@Min(1) @PathVariable Long id) {
         emotionService.deleteById(id);
     }
 }

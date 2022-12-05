@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -39,6 +40,7 @@ public class Question {
 
     @NotNull
     @Column(name = QUESTION_TEXT)
+    @NotBlank
     @Size(max = 120)
     private String text;
 

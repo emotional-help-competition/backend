@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Min;
+
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ;
 
 @RestController
 @RequestMapping(path = QUIZ)
 @RequiredArgsConstructor
+@Validated
 public class QuizController {
     private final QuizService quizService;
 
@@ -53,7 +58,7 @@ public class QuizController {
             @ApiResponse(responseCode = "404", description = "Quiz not found",
                     content = @Content)})
     @GetMapping("/{id}")
-    public QuizResponseDto findById(@PathVariable Long id) {
+    public QuizResponseDto findById(@Min(1) @PathVariable Long id) {
         return quizService.findById(id);
     }
 
@@ -79,7 +84,7 @@ public class QuizController {
                     content = @Content),
     })
     @PatchMapping("/{id}")
-    public QuizResponseDto update(@PathVariable Long id, @RequestBody QuizRequestDto quizRequestDto) {
+    public QuizResponseDto update(@Min(1) @PathVariable Long id, @RequestBody QuizRequestDto quizRequestDto) {
         return quizService.update(id, quizRequestDto);
     }
 
@@ -93,7 +98,7 @@ public class QuizController {
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@Min(1) @PathVariable Long id) {
         quizService.deleteById(id);
     }
 }
