@@ -1,13 +1,13 @@
 drop table quiz_result_emotion;
-
 drop table quiz_result;
+drop table quiz_attempt;
+drop table subcategory;
 
 create table quiz_attempt
 (
     id         int auto_increment primary key,
     created_at datetime
 );
-
 
 create table quiz_result
 (
