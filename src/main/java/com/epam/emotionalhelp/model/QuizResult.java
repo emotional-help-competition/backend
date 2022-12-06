@@ -28,17 +28,19 @@ public class QuizResult {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "quiz_id")
+    @JoinColumn(name = QUIZ_ID)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Quiz quiz;
 
     @OneToOne
-    @JoinColumn(name = QUIZ_ATTEMPT_ID)
+    @JoinColumn(name = QUIZ_RESULT_ATTEMPT_ID)
     private QuizAttempt attempt;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JoinColumn(name = CATEGORY_EMOTION_ID)
+    @ManyToMany(cascade = {CascadeType.MERGE})
+    @JoinTable(name = QUIZ_RESULT_EMOTION_TABLE_NAME,
+            joinColumns = {@JoinColumn(name = QUIZ_RESULT_ID)},
+            inverseJoinColumns = {@JoinColumn(name = EMOTION_ID)})
     private Set<Emotion> emotions;
 
     private Integer score;
