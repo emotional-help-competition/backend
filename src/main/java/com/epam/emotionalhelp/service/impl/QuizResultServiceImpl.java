@@ -1,7 +1,6 @@
 package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
-import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.model.EmotionCategory;
 import com.epam.emotionalhelp.model.Quiz;
@@ -13,7 +12,6 @@ import com.epam.emotionalhelp.repository.QuizAttemptRepository;
 import com.epam.emotionalhelp.repository.QuizRepository;
 import com.epam.emotionalhelp.repository.QuizResultRepository;
 import com.epam.emotionalhelp.repository.SubcategoryRepository;
-import com.epam.emotionalhelp.service.EmotionService;
 import com.epam.emotionalhelp.service.QuizResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +32,6 @@ public class QuizResultServiceImpl implements QuizResultService {
     private final QuizResultRepository quizResultRepository;
     private final QuizAttemptRepository quizAttemptRepository;
     private final QuizRepository quizRepository;
-    private final EmotionService emotionService;
     private final EmotionRepository emotionRepository;
     private final SubcategoryRepository subcategoryRepository;
 
@@ -87,7 +84,11 @@ public class QuizResultServiceImpl implements QuizResultService {
 
         for (EmotionDto emotionDto : emotions) {
             //Find emotion by ID
-            EmotionResponseDto emotion = emotionService.findById(emotionDto.getEmotionId());
+            Optional<Emotion> optionalEmotion = emotionRepository.findById(emotionDto.getEmotionId());
+            Emotion emotion = new Emotion();
+            if (optionalEmotion.isPresent()) {
+                emotion = optionalEmotion.get();
+            }
             if (Objects.equals(emotion.getDescription(), EmotionCategory.ANGER.getName())) {
                 angerList.add(emotionDto);
             } else if (Objects.equals(emotion.getDescription(), EmotionCategory.FEAR.getName())) {
