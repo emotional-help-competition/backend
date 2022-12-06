@@ -8,8 +8,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/v1/recommendations")
@@ -21,20 +23,17 @@ public class RecommendationController {
     @PostMapping
     public List<RecommendationEntity> getAll(@RequestBody @Valid List<EmotionDto> emotions) {
         return emotions.stream()
-                .map(em -> {
-                    // could be a few
-                    RecommendationEntity recommendation = recommendationRepository.findByEmotionId(em.getEmotionId());
-                    Integer value = em.getValue();
-                    if (value < recommendation.getFloor() || recommendation.getCeil() < value) {
-                        return null;
-                    }
-                    return recommendation;
-                })
+                .flatMap(em -> recommendationRepository.findAllByEmotionId(em.getEmotionId()).stream()
+                        .filter(rec -> isInsideInterval(em, rec)))
                 .collect(Collectors.toList());
+    }
+
+    private boolean isInsideInterval(EmotionDto em, RecommendationEntity rec) {
+        return rec.getFloor() <= em.getValue() && em.getValue() <= rec.getCeil();
     }
 
     @GetMapping("/{id}")
     public RecommendationEntity foo(@PathVariable Long id) {
-        return recommendationRepository.findByEmotionId(id);
+        return recommendationRepository.findAllByEmotionId(id).get(0);
     }
 }

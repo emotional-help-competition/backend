@@ -18,9 +18,11 @@ VALUES ('Do you like to get a present?', 1),
 
 INSERT INTO appointment (description_dummy)
 VALUES ('from sad training'),
-       ('increase joy training');
+       ('increase joy training'),
+       ('very good one from sad : )');
 
 
 INSERT INTO recommendation (emotion_id, appointment_id, floor, ceil)
 VALUES (6, 1, 0, 100),
+       (6, 3, 0, 40),
        (1, 2, 0, 20);
