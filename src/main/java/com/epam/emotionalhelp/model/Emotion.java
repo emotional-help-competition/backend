@@ -7,10 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import static com.epam.emotionalhelp.model.util.ColumnName.EMOTION_DESCRIPTION;
-import static com.epam.emotionalhelp.model.util.ColumnName.EMOTION_TABLE_NAME;
+import static com.epam.emotionalhelp.model.util.ColumnName.*;
 
 @Getter
 @Setter
@@ -23,12 +28,8 @@ public class Emotion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = EMOTION_DESCRIPTION)
+    @Column(name = DESCRIPTION)
     private String description;
-
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "id", insertable = false, updatable = false)
-//    private QuizResult quizResult;
 
     public Emotion(String description) {
         this.description = description;

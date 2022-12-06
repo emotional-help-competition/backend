@@ -37,15 +37,18 @@ public class EmotionController {
     public EmotionResponseDto findById(@PathVariable Long id) {
         return emotionService.findById(id);
     }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public EmotionResponseDto create(@RequestBody EmotionRequestDto emotionRequestDto) {
         return emotionService.create(emotionRequestDto);
     }
+
     @PatchMapping("/{id}")
     public EmotionResponseDto update(@PathVariable Long id, @RequestBody EmotionRequestDto emotionRequestDto) {
         return emotionService.update(id, emotionRequestDto);
     }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {

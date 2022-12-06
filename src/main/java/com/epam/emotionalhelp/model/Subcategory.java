@@ -15,20 +15,20 @@ import static com.epam.emotionalhelp.model.util.ColumnName.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = CATEGORY_TABLE_NAME)
+@Table(name = SUBCATEGORY_TABLE_NAME)
 @EntityListeners(AuditingEntityListener.class)
-public class Category {
+public class Subcategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = CATEGORY_EMOTION_ID)
+    @JoinColumn(name = EMOTION_ID)
     private Emotion emotion;
 
-    @Column(name = CATEGORY_DESCRIPTION)
+    @Column(name = DESCRIPTION)
     private String description;
 
-    @Column(name = CATEGORY_WEIGHT)
+    @Column(name = SUBCATEGORY_WEIGHT)
     private Integer weight;
 }

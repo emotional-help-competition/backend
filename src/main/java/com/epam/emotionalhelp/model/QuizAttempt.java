@@ -14,8 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_CREATE_DATE;
-import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_RESULT_TABLE_NAME;
+import static com.epam.emotionalhelp.model.util.ColumnName.*;
 
 
 @Builder
@@ -24,12 +23,12 @@ import static com.epam.emotionalhelp.model.util.ColumnName.QUIZ_RESULT_TABLE_NAM
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = QUIZ_RESULT_TABLE_NAME)
+@Table(name = QUIZ_ATTEMPT_TABLE_NAME)
 public class QuizAttempt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = QUIZ_CREATE_DATE)
+    @Column(name = CREATE_DATE)
     private LocalDateTime createDate;
 }

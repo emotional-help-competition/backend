@@ -45,15 +45,15 @@ public class Quiz {
     private String name;
 
     @NotNull
-    @Column(name = QUIZ_DESCRIPTION)
+    @Column(name = DESCRIPTION)
     private String description;
 
-    @Column(name = QUIZ_CREATE_DATE)
+    @Column(name = CREATE_DATE)
     private LocalDateTime createDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = QUIZ_QUESTION,
-            joinColumns = {@JoinColumn(name = LINK_QUIZ_ID)},
+            joinColumns = {@JoinColumn(name = QUIZ_ID)},
             inverseJoinColumns = {@JoinColumn(name = LINK_QUESTION_ID)})
     private Set<Question> questions;
 }
