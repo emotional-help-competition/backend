@@ -1,8 +1,8 @@
 package com.epam.emotionalhelp.controller.dto;
 
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 public class EmotionRequestDto {
-     String description;
+     private String description;
 }

@@ -1,11 +1,11 @@
 package com.epam.emotionalhelp.controller.dto;
 
 import com.epam.emotionalhelp.model.Emotion;
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 public class QuestionResponseDto {
-    Long id;
-    String text;
-    Emotion emotion;
+    private Long id;
+    private String text;
+    private Emotion emotion;
 }
