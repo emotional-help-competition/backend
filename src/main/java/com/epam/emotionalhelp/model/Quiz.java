@@ -20,11 +20,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import static com.epam.emotionalhelp.model.util.ColumnName.*;
@@ -44,23 +42,18 @@ public class Quiz {
 
     @NotNull
     @Column(name = QUIZ_NAME)
-    @NotBlank
-    @Size(max = 30)
     private String name;
 
     @NotNull
-    @Column(name = QUIZ_DESCRIPTION)
-    @NotBlank
-    @Size(max = 120)
+    @Column(name = DESCRIPTION)
     private String description;
 
-    @Column(name = QUIZ_CREATE_DATE)
-    @NotNull
-    private ZonedDateTime createDate;
+    @Column(name = CREATE_DATE)
+    private LocalDateTime createDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = QUIZ_QUESTION,
-            joinColumns = {@JoinColumn(name = LINK_QUIZ_ID)},
+            joinColumns = {@JoinColumn(name = QUIZ_ID)},
             inverseJoinColumns = {@JoinColumn(name = LINK_QUESTION_ID)})
     private Set<Question> questions;
 }
