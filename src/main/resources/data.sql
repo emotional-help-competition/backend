@@ -16,7 +16,7 @@ VALUES ('Do you like to get a present?', 1),
        ('Your grandmother`s cat died, do you feel sad?', 6);
 
 
-INSERT INTO appointment (description_dummy)
+INSERT INTO appointment (description)
 VALUES ('from sad training'),
        ('increase joy training'),
        ('very good one from sad : )');
@@ -26,3 +26,18 @@ INSERT INTO recommendation (emotion_id, appointment_id, floor, ceil)
 VALUES (6, 1, 0, 100),
        (6, 3, 0, 40),
        (1, 2, 0, 20);
+
+INSERT INTO appointment_type (description)
+VALUES ('general training'),
+       ('psychologist');
+
+INSERT INTO appointment (appointment_type_id, description, icon, link)
+VALUES (1,
+        'this is youtube general training; it is suitable for everyone',
+        'https://www.imagenspng.com.br/wp-content/uploads/2020/10/among-us-icon-png-02.png',
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+       (2,
+        'this is appointment with real psychologist; doctor is going to find different ways to your personality',
+        'https://www.imagenspng.com.br/wp-content/uploads/2020/10/among-us-icon-png-02.png',
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+
