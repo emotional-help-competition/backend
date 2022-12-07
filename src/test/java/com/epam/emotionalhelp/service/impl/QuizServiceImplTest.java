@@ -8,6 +8,8 @@ import com.epam.emotionalhelp.model.Question;
 import com.epam.emotionalhelp.model.Quiz;
 import com.epam.emotionalhelp.repository.QuestionRepository;
 import com.epam.emotionalhelp.repository.QuizRepository;
+import com.epam.emotionalhelp.service.QuestionService;
+import com.epam.emotionalhelp.service.QuizService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +43,7 @@ public class QuizServiceImplTest {
     @Mock
     private QuestionRepository questionRepository;
 
-    private QuizServiceImpl quizService;
+    private QuizService quizService;
 
     @BeforeEach
     void setUp() {
@@ -88,7 +90,7 @@ public class QuizServiceImplTest {
     }
 
     @Test
-    void create() {
+    void create_withCorrectArguments_returnsCreatedQuiz() {
         Set<Question> questions = generateQuestions();
         Quiz quiz = generateQuiz("quiz description", "quiz name", questions);
         when(quizRepository.save(any())).thenReturn(quiz);
@@ -118,7 +120,7 @@ public class QuizServiceImplTest {
     }
 
     @Test
-    void update() {
+    void updateData_withCorrectArguments_returnsUpdatedQuiz() {
         Set<Question> questions = generateQuestions();
         Quiz quiz = generateQuiz("quiz description", "quiz name", questions);
         when(quizRepository.findById(anyLong())).thenReturn(Optional.of(quiz));
@@ -146,7 +148,7 @@ public class QuizServiceImplTest {
     }
 
     @Test
-    void deleteById() {
+    void delete_withCorrectQuizId() {
         Set<Question> questions = generateQuestions();
         Quiz quiz = generateQuiz("quiz description1", "quiz name1", questions);
         when(quizRepository.findById(1L)).thenReturn(Optional.of(quiz));

@@ -7,6 +7,7 @@ import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.model.Question;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.repository.QuestionRepository;
+import com.epam.emotionalhelp.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +38,7 @@ class QuestionServiceImplTest {
     private QuestionRepository questionRepository;
     @Mock
     private EmotionRepository emotionRepository;
-    private QuestionServiceImpl questionService;
+    private QuestionService  questionService;
 
     @BeforeEach
     void setUp() {
@@ -78,7 +79,7 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void create() {
+    void create_withCorrectArguments_returnsCreatedQuestion() {
         Emotion emotion = new Emotion(1L, "test");
         Question question = generateQuestion("question", emotion);
         when(questionRepository.save(any())).thenReturn(question);
@@ -102,7 +103,7 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void update() {
+    void updateData_withCorrectArguments_returnsUpdatedQuestion() {
         Question question = new Question(1L, "question", new Emotion(1L, "emotion"));
         when(questionRepository.findById(anyLong())).thenReturn(Optional.of(question));
         Question expected = new Question("question1", new Emotion(2L, "emotion 2"));
@@ -126,7 +127,7 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void deleteById() {
+    void delete_withCorrectQuestionId() {
         Question question = new Question(1L, "question", new Emotion(1L, "emotion"));
         when(questionRepository.findById(1L)).thenReturn(Optional.of(question));
         questionService.deleteById(1L);

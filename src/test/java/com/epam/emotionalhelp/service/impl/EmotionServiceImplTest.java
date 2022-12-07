@@ -5,6 +5,7 @@ import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
 import com.epam.emotionalhelp.exceptionhandler.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.repository.EmotionRepository;
+import com.epam.emotionalhelp.service.EmotionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +34,7 @@ public class EmotionServiceImplTest {
     @Mock
     private EmotionRepository emotionRepository;
 
-    private EmotionServiceImpl emotionService;
+    private EmotionService emotionService;
 
     @BeforeEach
     void setUp() {
@@ -71,7 +72,7 @@ public class EmotionServiceImplTest {
     }
 
     @Test
-    void create() {
+    void create_withCorrectArguments_returnsCreatedEmotion() {
         Emotion emotion = new Emotion("emotion");
         when(emotionRepository.save(any())).thenReturn(emotion);
         EmotionRequestDto emotionRequestDto = new EmotionRequestDto();
@@ -84,7 +85,7 @@ public class EmotionServiceImplTest {
     }
 
     @Test
-    void update() {
+    void updateData_withCorrectArguments_returnsUpdatedEmotion() {
         Emotion emotion = new Emotion("emotion");
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.of(emotion));
         Emotion expected = new Emotion("emotion1");
@@ -107,7 +108,7 @@ public class EmotionServiceImplTest {
     }
 
     @Test
-    void deleteById() {
+    void delete_withCorrectEmotionId() {
         Emotion emotion = new Emotion("emotion");
         when(emotionRepository.findById(1L)).thenReturn(Optional.of(emotion));
         emotionService.deleteById(1L);
