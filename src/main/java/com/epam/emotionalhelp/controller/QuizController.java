@@ -1,8 +1,10 @@
 package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.config.CORSConfig;
+import com.epam.emotionalhelp.controller.dto.EmotionDto;
 import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuizResponseDto;
+import com.epam.emotionalhelp.service.QuizResultService;
 import com.epam.emotionalhelp.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.List;
+
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ;
 
 @RestController
@@ -27,6 +32,8 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ;
 @RequiredArgsConstructor
 public class QuizController {
     private final QuizService quizService;
+    private final QuizResultService quizResultService;
+
     @GetMapping
     public Page<QuizResponseDto> findAll(Pageable pageable) {
         return quizService.findAll(pageable);
@@ -41,6 +48,11 @@ public class QuizController {
     @PostMapping
     public QuizResponseDto create(@RequestBody QuizRequestDto quizRequestDto) {
         return quizService.create(quizRequestDto);
+    }
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{id}")
+    public int create(@PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
+        return quizResultService.calculate(id, emotions);
     }
 
     @PatchMapping("/{id}")

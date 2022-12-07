@@ -20,11 +20,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -35,148 +34,85 @@ public class QuizResultServiceImpl implements QuizResultService {
     private final EmotionRepository emotionRepository;
     private final SubcategoryRepository subcategoryRepository;
 
-
     @Override
     public Page<QuizResult> findAll(Pageable pageable) {
         return quizResultRepository.findAll(pageable);
     }
 
     @Override
-    public List<List<Subcategory>> calculateResult(Long quizId, List<EmotionDto> emotions) {
-        //Create QuizResult object
-        QuizResult quizResult = new QuizResult();
-        //Set an quizId from the path variable
+    public int calculate(Long quizId, List<EmotionDto> emotions) {
+        //Find passed Quiz
         Optional<Quiz> quiz = quizRepository.findById(quizId);
-        quiz.ifPresent(quizResult::setQuiz);
         //Create QuizAttempt object
         QuizAttempt quizAttempt = new QuizAttempt();
         quizAttempt.setCreateDate(LocalDateTime.now());
         QuizAttempt quizAttemptFinal = quizAttemptRepository.save(quizAttempt);
-        quizResult.setAttempt(quizAttemptFinal);
-        //Calculating the data for producing subcategories
-        List<List<EmotionDto>> filteredList = filterListByEmotions(emotions);
-        List<Integer> percentages = calculatePercentagesByEmotions(filteredList);
-        List<List<Subcategory>> subcategories = fillSubcategories(percentages);
+        //Filter the list to divide data by Emotions
+        Map<EmotionCategory, List<EmotionDto>> filteredList = filterListByEmotions(emotions);
+        Map<Emotion, Integer> emotionPercentages = calculatePercentagesByEmotion(filteredList);
         //Get the set of emotions
-        Set<Emotion> emotionSet = findListOfEmotions(emotions);
-        quizResult.setEmotions(emotionSet);
-        //Calculate QuizResult score
-        int score = calculateQuizResultScore(emotions);
-        quizResult.setScore(score);
-        //Create Quiz Result
-        quizResultRepository.save(quizResult);
-
-        return subcategories;
+        for (Map.Entry<Emotion, Integer> entry : emotionPercentages.entrySet()) {
+            //Create QuizResult object
+            QuizResult quizResult = new QuizResult();
+            quiz.ifPresent(quizResult::setQuiz);
+            quizResult.setAttempt(quizAttemptFinal);
+            quizResult.setEmotion(entry.getKey());
+            quizResult.setScore(entry.getValue());
+            quizResultRepository.save(quizResult);
+        }
+        return Math.toIntExact(quizAttempt.getId());
     }
 
-    private List<List<EmotionDto>> filterListByEmotions(List<EmotionDto> emotions) {
+    @Override
+    public Map<Emotion, List<Subcategory>> findQuizResultByAttemptId(Long id) {
+        //Find QuizResult
+        List<QuizResult> list = quizResultRepository.findQuizResultsByAttemptId(id);
+        Map<Emotion, List<Subcategory>> map = new HashMap<>();
+        //Extract Emotion and get Subcategories based on '%'
+        for (QuizResult quizResult : list) {
+            Emotion emotion = quizResult.getEmotion();
+            List<Subcategory> subcategories = subcategoryRepository.findAllSubcategories(quizResult.getScore(), emotion.getId());
+            map.put(emotion, subcategories);
+        }
+        return map;
+    }
 
-        List<List<EmotionDto>> filteredList = new ArrayList<>();
-        List<EmotionDto> angerList = new ArrayList<>();
-        List<EmotionDto> fearList = new ArrayList<>();
-        List<EmotionDto> sadnessList = new ArrayList<>();
-        List<EmotionDto> loveList = new ArrayList<>();
-        List<EmotionDto> surpriseList = new ArrayList<>();
-        List<EmotionDto> joyList = new ArrayList<>();
-        List<EmotionDto> acceptedList = new ArrayList<>();
-        List<EmotionDto> afraidList = new ArrayList<>();
-        List<EmotionDto> scaredList = new ArrayList<>();
-
+    private Map<EmotionCategory, List<EmotionDto>> filterListByEmotions(List<EmotionDto> emotions) {
+        Map<EmotionCategory, List<EmotionDto>> map = new HashMap<>();
         for (EmotionDto emotionDto : emotions) {
-            //Find emotion by ID
+            //Find emotion
             Optional<Emotion> optionalEmotion = emotionRepository.findById(emotionDto.getEmotionId());
             Emotion emotion = new Emotion();
             if (optionalEmotion.isPresent()) {
                 emotion = optionalEmotion.get();
             }
-            if (Objects.equals(emotion.getDescription(), EmotionCategory.ANGER.getName())) {
-                angerList.add(emotionDto);
-            } else if (Objects.equals(emotion.getDescription(), EmotionCategory.FEAR.getName())) {
-                fearList.add(emotionDto);
-            } else if (Objects.equals(emotion.getDescription(), EmotionCategory.SADNESS.getName())) {
-                sadnessList.add(emotionDto);
-            } else if (Objects.equals(emotion.getDescription(), EmotionCategory.LOVE.getName())) {
-                loveList.add(emotionDto);
-            } else if (Objects.equals(emotion.getDescription(), EmotionCategory.SURPRISE.getName())) {
-                surpriseList.add(emotionDto);
-            } else if (Objects.equals(emotion.getDescription(), EmotionCategory.JOY.getName())) {
-                joyList.add(emotionDto);
-            } else if (Objects.equals(emotion.getDescription(), EmotionCategory.ACCEPTED.getName())) {
-                acceptedList.add(emotionDto);
-            } else if (Objects.equals(emotion.getDescription(), EmotionCategory.AFRAID.getName())) {
-                afraidList.add(emotionDto);
-            } else if (Objects.equals(emotion.getDescription(), EmotionCategory.SCARED.getName())) {
-                scaredList.add(emotionDto);
+            //Extract description of found emotion
+            String description = emotion.getDescription().toUpperCase();
+            //Check if map already contains EMOTION
+            if (map.containsKey(EmotionCategory.valueOf(description))) {
+                map.get(EmotionCategory.valueOf(description)).add(emotionDto);
+            } else {
+                List<EmotionDto> list = new ArrayList<>();
+                map.put(EmotionCategory.valueOf(description), list);
             }
         }
-
-        filteredList.add(angerList);
-        filteredList.add(fearList);
-        filteredList.add(sadnessList);
-        filteredList.add(loveList);
-        filteredList.add(surpriseList);
-        filteredList.add(joyList);
-        filteredList.add(acceptedList);
-        filteredList.add(afraidList);
-        filteredList.add(scaredList);
-
-        return filteredList;
+        return map;
     }
 
-    private Set<Emotion> findListOfEmotions(List<EmotionDto> emotions) {
-        Set<Emotion> emotionSet = new HashSet<>();
-        for (EmotionDto emotionDto : emotions) {
-            Optional<Emotion> optionalEmotion = emotionRepository.findById(emotionDto.getEmotionId());
-            Emotion emotion = new Emotion();
-            if (optionalEmotion.isPresent()) {
-                emotion = optionalEmotion.get();
-            }
-            emotionSet.add(emotion);
+    private Map<Emotion, Integer> calculatePercentagesByEmotion(Map<EmotionCategory, List<EmotionDto>> filteredList) {
+        Map<Emotion, Integer> map = new HashMap<>();
+        for (Map.Entry<EmotionCategory, List<EmotionDto>> entry : filteredList.entrySet()) {
+            Emotion emotion = emotionRepository.findEmotionByDescription(entry.getKey().getName());
+            map.put(emotion, calculateListPercentages(entry.getValue()));
         }
-        return emotionSet;
+        return map;
     }
 
-    private List<Integer> calculatePercentagesByEmotions(List<List<EmotionDto>> filteredList) {
-        List<Integer> percentagesList = new ArrayList<>();
-        for (List<EmotionDto> list : filteredList) {
-            int listSum = 0;
-            int listLength = list.size();
-            for (EmotionDto emotionDto : list) {
-                listSum += emotionDto.getValue();
-            }
-            percentagesList.add(listSum / listLength);
-        }
-        return percentagesList;
-    }
-
-    private int calculateQuizResultScore(List<EmotionDto> emotions) {
+    private int calculateListPercentages(List<EmotionDto> list) {
         int sum = 0;
-        for (EmotionDto emotion : emotions) {
-            sum += emotion.getValue();
+        for (EmotionDto emotionDto : list) {
+            sum += emotionDto.getValue();
         }
-        return sum / emotions.size();
-    }
-
-    private List<List<Subcategory>> fillSubcategories(List<Integer> list) {
-        List<List<Subcategory>> subcategory = new ArrayList<>();
-        List<Subcategory> angerList = subcategoryRepository.findAllSubcategories(list.get(0), 1L);
-        List<Subcategory> fearList = subcategoryRepository.findAllSubcategories(list.get(1), 2L);
-        List<Subcategory> sadnessList = subcategoryRepository.findAllSubcategories(list.get(2), 3L);
-        List<Subcategory> loveList = subcategoryRepository.findAllSubcategories(list.get(3), 4L);
-        List<Subcategory> surpriseList = subcategoryRepository.findAllSubcategories(list.get(4), 5L);
-        List<Subcategory> joyList = subcategoryRepository.findAllSubcategories(list.get(5), 6L);
-        List<Subcategory> acceptedList = subcategoryRepository.findAllSubcategories(list.get(6), 7L);
-        List<Subcategory> afraidList = subcategoryRepository.findAllSubcategories(list.get(7), 8L);
-        List<Subcategory> scaredList = subcategoryRepository.findAllSubcategories(list.get(8), 9L);
-        subcategory.add(angerList);
-        subcategory.add(fearList);
-        subcategory.add(sadnessList);
-        subcategory.add(loveList);
-        subcategory.add(surpriseList);
-        subcategory.add(joyList);
-        subcategory.add(acceptedList);
-        subcategory.add(afraidList);
-        subcategory.add(scaredList);
-        return subcategory;
+        return sum / list.size();
     }
 }
