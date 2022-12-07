@@ -18,8 +18,8 @@ import javax.validation.constraints.Min;
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
-    @GetMapping("/{id}")
-    public AppointmentEntity findById(@Min(1) @PathVariable Long id) {
-        return appointmentService.findById(id);
+    @GetMapping("/{appointmentId}")
+    public AppointmentEntity findById(@Min(1) @PathVariable Long appointmentId) {
+        return appointmentService.findById(appointmentId);
     }
 }
