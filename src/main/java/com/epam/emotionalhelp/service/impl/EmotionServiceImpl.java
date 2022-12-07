@@ -34,7 +34,6 @@ public class EmotionServiceImpl implements EmotionService {
         return EmotionMapper.toDto(emotionRepository.save(EmotionMapper.toEntity(emotionRequestDto)));
     }
 
-
     @Transactional
     @Override
     public EmotionResponseDto update(Long id, EmotionRequestDto emotionRequestDto) {

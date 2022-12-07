@@ -20,7 +20,7 @@ create table quiz_result
     foreign key (emotion_id) references emotion (id)
 );
 
-create table category
+create table subcategory
 (
     id          int auto_increment primary key,
     emotion_id  int,
