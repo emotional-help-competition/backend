@@ -9,9 +9,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-import java.util.Set;
 
 import static com.epam.emotionalhelp.model.util.ColumnName.*;
 
@@ -37,11 +43,9 @@ public class QuizResult {
     @JoinColumn(name = QUIZ_RESULT_ATTEMPT_ID)
     private QuizAttempt attempt;
 
-    @ManyToMany(cascade = {CascadeType.MERGE})
-    @JoinTable(name = QUIZ_RESULT_EMOTION_TABLE_NAME,
-            joinColumns = {@JoinColumn(name = QUIZ_RESULT_ID)},
-            inverseJoinColumns = {@JoinColumn(name = EMOTION_ID)})
-    private Set<Emotion> emotions;
+    @OneToOne
+    @JoinColumn(name = EMOTION_ID)
+    private Emotion emotion;
 
     private Integer score;
 }

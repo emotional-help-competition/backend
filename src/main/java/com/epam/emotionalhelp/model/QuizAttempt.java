@@ -11,8 +11,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import static com.epam.emotionalhelp.model.util.ColumnName.*;
 
@@ -31,4 +33,7 @@ public class QuizAttempt {
 
     @Column(name = CREATE_DATE)
     private LocalDateTime createDate;
+
+    @OneToMany
+    private Set<QuizResult> list;
 }
