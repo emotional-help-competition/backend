@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
@@ -21,6 +22,7 @@ import static com.epam.emotionalhelp.model.util.ColumnName.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Entity
 @Table(name = EMOTION_TABLE_NAME)
 @EntityListeners(AuditingEntityListener.class)
