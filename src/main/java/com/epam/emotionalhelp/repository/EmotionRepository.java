@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmotionRepository extends JpaRepository<Emotion, Long> {
+    Emotion findEmotionByDescription(String description);
 
     Page<Emotion> findAll(Pageable pageable);
 }
