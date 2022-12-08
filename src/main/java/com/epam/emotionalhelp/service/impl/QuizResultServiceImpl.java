@@ -64,9 +64,9 @@ public class QuizResultServiceImpl implements QuizResultService {
     }
 
     @Override
-    public Map<Emotion, List<Subcategory>> findQuizResultByAttemptId(Long id) {
+    public Map<Emotion, List<Subcategory>> findByAttemptId(Long id) {
         //Find QuizResult
-        List<QuizResult> list = quizResultRepository.findQuizResultsByAttemptId(id);
+        List<QuizResult> list = quizResultRepository.findAllByAttemptId(id);
         Map<Emotion, List<Subcategory>> map = new HashMap<>();
         //Extract Emotion and get Subcategories based on '%'
         for (QuizResult quizResult : list) {

@@ -15,5 +15,5 @@ public interface QuizResultService {
 
     int calculate(Long quizId, List<EmotionDto> emotions);
 
-    Map<Emotion, List<Subcategory>> findQuizResultByAttemptId(Long id);
+    Map<Emotion, List<Subcategory>> findByAttemptId(Long id);
 }

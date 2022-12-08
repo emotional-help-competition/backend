@@ -31,6 +31,6 @@ public class QuizResultController {
 
     @GetMapping("/{id}")
     public Map<Emotion, List<Subcategory>> findQuizResultByAttemptId(@PathVariable Long id) {
-        return quizResultService.findQuizResultByAttemptId(id);
+        return quizResultService.findByAttemptId(id);
     }
 }

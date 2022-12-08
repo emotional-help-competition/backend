@@ -26,7 +26,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     @Override
     @Transactional
     public List<AppointmentResponseDto> findAllByAttemptId(Long attemptId) {
-        return quizResultRepository.findQuizResultsByAttemptId(attemptId).stream()
+        return quizResultRepository.findAllByAttemptId(attemptId).stream()
                 .map(Mapper::toEmotionDto)
                 .flatMap(em -> recommendationRepository.findAllByEmotionId(em.getEmotionId()).stream()
                         .filter(isInsideInterval(em)))
