@@ -9,6 +9,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class QuestionRequestDto {
     @NotBlank
-    String text;
-    Emotion emotion;
+    private String text;
+    private Emotion emotion;
 }

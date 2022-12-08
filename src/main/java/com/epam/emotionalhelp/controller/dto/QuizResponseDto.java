@@ -4,7 +4,7 @@ import com.epam.emotionalhelp.model.Question;
 import lombok.Builder;
 import lombok.Value;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Value
@@ -13,6 +13,6 @@ public class QuizResponseDto {
     Long id;
     String name;
     String description;
-    ZonedDateTime createDate;
+    LocalDateTime createDate;
     Set<Question> questions;
 }

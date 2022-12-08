@@ -1,15 +1,6 @@
 package com.epam.emotionalhelp.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,7 +9,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 
 import static com.epam.emotionalhelp.model.util.ColumnName.*;
 
@@ -35,22 +34,18 @@ public class QuizResult {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "quiz_id")
+    @JoinColumn(name = QUIZ_ID)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Quiz quiz;
 
-    @ManyToOne
-    @JoinColumn(name = QUIZ_RESULT_USER_ID)
-    private UserEntity user;
+    @OneToOne
+    @JoinColumn(name = QUIZ_RESULT_ATTEMPT_ID)
+    private QuizAttempt attempt;
 
-    @ManyToOne
-    @JoinColumn(name = "emotion_id")
+    @OneToOne
+    @JoinColumn(name = EMOTION_ID)
     private Emotion emotion;
 
-    @NotNull
     private Integer score;
-
-    @NotNull
-    private LocalDateTime createdAt;
 }
