@@ -8,6 +8,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
+@AllArgsConstructor
 @Builder
 public class QuizRequestDto {
     private String name;
