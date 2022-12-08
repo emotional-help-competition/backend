@@ -2,8 +2,7 @@ package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuizResponseDto;
-import com.epam.emotionalhelp.controller.response.ResponseMessage;
-import com.epam.emotionalhelp.exceptionhandler.exception.ResourceNotFoundException;
+import com.epam.emotionalhelp.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Quiz;
 import com.epam.emotionalhelp.repository.QuestionRepository;
 import com.epam.emotionalhelp.repository.QuizRepository;
@@ -15,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
+    private final Supplier<RuntimeException> QUIZ_NOT_FOUND =
+            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUIZ_NOT_FOUND);
 
     @Override
     public Page<QuizResponseDto> findAll(Pageable pageable) {
@@ -37,7 +39,7 @@ public class QuizServiceImpl implements QuizService {
     public QuizResponseDto create(QuizRequestDto quizRequestDto) {
         var questions = quizRequestDto.getQuestions().stream()
                 .map(question -> questionRepository.findById(question.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND))).collect(Collectors.toSet());
+                .orElseThrow(QUIZ_NOT_FOUND)).collect(Collectors.toSet());
         quizRequestDto.setQuestions(questions);
         return QuizMapper.toDto(quizRepository.save(QuizMapper.toEntity(quizRequestDto)));
     }
@@ -63,6 +65,6 @@ public class QuizServiceImpl implements QuizService {
         quizRepository.delete(quiz);
     }
     private Quiz findQuizById(Long id){
-        return quizRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
+        return quizRepository.findById(id).orElseThrow(QUIZ_NOT_FOUND);
     }
 }
