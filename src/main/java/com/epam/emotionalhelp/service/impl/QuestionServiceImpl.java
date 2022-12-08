@@ -24,6 +24,8 @@ public class QuestionServiceImpl implements QuestionService {
     private final EmotionRepository emotionRepository;
     private final Supplier<RuntimeException> QUESTION_NOT_FOUND =
             () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUESTION_NOT_FOUND);
+    private final Supplier<RuntimeException> EMOTION_NOT_FOUND =
+            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.EMOTION_NOT_FOUND);
 
     @Override
     public Page<QuestionResponseDto> findAll(Pageable pageable) {
@@ -39,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionResponseDto create(QuestionRequestDto questionRequestDto) {
         var emotion = emotionRepository.findById(questionRequestDto.getEmotion().getId())
-                .orElseThrow(QUESTION_NOT_FOUND);
+                .orElseThrow(EMOTION_NOT_FOUND);
         var question = QuestionMapper.toEntity(questionRequestDto);
         question.setEmotion(emotion);
         return QuestionMapper.toDto(questionRepository.save(question));

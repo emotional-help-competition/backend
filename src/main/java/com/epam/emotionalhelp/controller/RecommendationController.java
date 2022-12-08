@@ -1,7 +1,6 @@
 package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.dto.AppointmentResponseDto;
-import com.epam.emotionalhelp.model.Quiz;
 import com.epam.emotionalhelp.service.RecommendationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

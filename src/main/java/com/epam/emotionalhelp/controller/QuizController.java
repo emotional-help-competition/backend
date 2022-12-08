@@ -1,10 +1,8 @@
 package com.epam.emotionalhelp.controller;
 
-import com.epam.emotionalhelp.controller.config.CORSConfig;
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
 import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuizResponseDto;
-import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.model.Quiz;
 import com.epam.emotionalhelp.service.QuizResultService;
 import com.epam.emotionalhelp.service.QuizService;
@@ -18,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -69,15 +66,31 @@ public class QuizController {
         return quizService.findById(id);
     }
 
+    @Operation(summary = "Create the quiz")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Quiz was created",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Quiz.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+                    content = @Content),
+    })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public QuizResponseDto create(@RequestBody @Valid QuizRequestDto quizRequestDto) {
         return quizService.create(quizRequestDto);
     }
 
+    @Operation(summary = "Get quiz results")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns attempt id for these results",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Quiz.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+                    content = @Content),
+    })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}")
-    public int create(@Min(1) @PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
+    public int calculate(@Min(1) @PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
         return quizResultService.calculate(id, emotions);
     }
 

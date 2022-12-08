@@ -24,6 +24,8 @@ public class QuizServiceImpl implements QuizService {
     private final QuestionRepository questionRepository;
     private final Supplier<RuntimeException> QUIZ_NOT_FOUND =
             () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUIZ_NOT_FOUND);
+    private final Supplier<RuntimeException> QUESTION_NOT_FOUND =
+            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUESTION_NOT_FOUND);
 
     @Override
     public Page<QuizResponseDto> findAll(Pageable pageable) {
@@ -39,10 +41,11 @@ public class QuizServiceImpl implements QuizService {
     public QuizResponseDto create(QuizRequestDto quizRequestDto) {
         var questions = quizRequestDto.getQuestions().stream()
                 .map(question -> questionRepository.findById(question.getId())
-                .orElseThrow(QUIZ_NOT_FOUND)).collect(Collectors.toSet());
+                        .orElseThrow(QUESTION_NOT_FOUND)).collect(Collectors.toSet());
         quizRequestDto.setQuestions(questions);
         return QuizMapper.toDto(quizRepository.save(QuizMapper.toEntity(quizRequestDto)));
     }
+
     @Transactional
     @Override
     public QuizResponseDto update(Long id, QuizRequestDto quizRequestDto) {
@@ -58,12 +61,14 @@ public class QuizServiceImpl implements QuizService {
         }
         return QuizMapper.toDto(quizRepository.save(quiz));
     }
+
     @Transactional
     @Override
     public void deleteById(Long id) {
         var quiz = findQuizById(id);
         quizRepository.delete(quiz);
     }
+
     private Quiz findQuizById(Long id){
         return quizRepository.findById(id).orElseThrow(QUIZ_NOT_FOUND);
     }
