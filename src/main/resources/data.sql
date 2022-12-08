@@ -121,6 +121,7 @@ VALUES ();
 
 
 INSERT INTO quiz_result(quiz_id, attempt_id, emotion_id, score)
-VALUES (1, 1, 1, 50),
+VALUES (1, 1, 1, 10),
        (1, 1, 2, 60),
-       (1, 1, 3, 70);
+       (1, 1, 3, 70),
+       (1, 1, 6, 30);
