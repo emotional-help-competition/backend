@@ -1,6 +1,8 @@
 package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
+import com.epam.emotionalhelp.controller.dto.QuizResultEmotionDto;
+import com.epam.emotionalhelp.controller.dto.SubcategoryDto;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.model.EmotionCategory;
 import com.epam.emotionalhelp.model.Quiz;
@@ -64,17 +66,25 @@ public class QuizResultServiceImpl implements QuizResultService {
     }
 
     @Override
-    public Map<Emotion, List<Subcategory>> findQuizResultByAttemptId(Long id) {
+    public List<QuizResultEmotionDto> findQuizResultByAttemptId(Long id) {
         //Find QuizResult
         List<QuizResult> list = quizResultRepository.findQuizResultsByAttemptId(id);
-        Map<Emotion, List<Subcategory>> map = new HashMap<>();
+        //Create list to return
+        List<QuizResultEmotionDto> resultList = new ArrayList<>();
         //Extract Emotion and get Subcategories based on '%'
         for (QuizResult quizResult : list) {
             Emotion emotion = quizResult.getEmotion();
+            //Find All Subcategories
             List<Subcategory> subcategories = subcategoryRepository.findAllSubcategories(quizResult.getScore(), emotion.getId());
-            map.put(emotion, subcategories);
+            //Create QuizResultEmotionDto
+            QuizResultEmotionDto quizResultEmotionDto = new QuizResultEmotionDto();
+            quizResultEmotionDto.setCategory(emotion.getDescription());
+            List<SubcategoryDto> subcategoryList = fillList(subcategories);
+            quizResultEmotionDto.setSubCategories(subcategoryList);
+            //Add QuizResultEmotionDto to the List
+            resultList.add(quizResultEmotionDto);
         }
-        return map;
+        return resultList;
     }
 
     private Map<EmotionCategory, List<EmotionDto>> filterListByEmotions(List<EmotionDto> emotions) {
@@ -93,6 +103,7 @@ public class QuizResultServiceImpl implements QuizResultService {
                 map.get(EmotionCategory.valueOf(description)).add(emotionDto);
             } else {
                 List<EmotionDto> list = new ArrayList<>();
+                list.add(emotionDto);
                 map.put(EmotionCategory.valueOf(description), list);
             }
         }
@@ -114,5 +125,16 @@ public class QuizResultServiceImpl implements QuizResultService {
             sum += emotionDto.getValue();
         }
         return sum / list.size();
+    }
+
+    private List<SubcategoryDto> fillList(List<Subcategory> list) {
+        List<SubcategoryDto> result = new ArrayList<>();
+        for (Subcategory subcategory : list) {
+            SubcategoryDto subcategoryDto = new SubcategoryDto();
+            subcategoryDto.setEmotions(subcategory.getDescription());
+            subcategoryDto.setScore(Double.valueOf((subcategory.getWeight())));
+            result.add(subcategoryDto);
+        }
+        return result;
     }
 }
