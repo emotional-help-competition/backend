@@ -1,11 +1,12 @@
 package com.epam.emotionalhelp.controller.dto;
 
 import com.epam.emotionalhelp.model.Emotion;
-import lombok.Value;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
-@Value
+@Data
+@AllArgsConstructor
 public class QuestionRequestDto {
     @NotBlank
     String text;
