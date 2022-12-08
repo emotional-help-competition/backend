@@ -4,10 +4,7 @@ import com.epam.emotionalhelp.controller.dto.AppointmentResponseDto;
 import com.epam.emotionalhelp.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -19,8 +16,8 @@ import java.util.List;
 public class RecommendationController {
     private final RecommendationService recommendationService;
 
-    @PostMapping("/attempt/{attemptId}")
-    public List<AppointmentResponseDto> findAllByAttemptId(@Min(1) @PathVariable Long attemptId) {
+    @PostMapping
+    public List<AppointmentResponseDto> findAllByAttemptId(@Min(1) @RequestParam Long attemptId) {
         return recommendationService.findAllByAttemptId(attemptId);
     }
 }
