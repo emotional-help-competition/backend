@@ -9,6 +9,7 @@ import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.service.EmotionService;
 import com.epam.emotionalhelp.service.mapper.EmotionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class EmotionServiceImpl implements EmotionService {
+    @Autowired
     private final EmotionRepository emotionRepository;
 
     @Override
