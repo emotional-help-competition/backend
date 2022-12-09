@@ -1,6 +1,6 @@
 package com.epam.emotionalhelp.controller;
 
-import com.epam.emotionalhelp.controller.dto.QuizResultEmotionDto;
+import com.epam.emotionalhelp.controller.dto.EmotionalMapDto;
 import com.epam.emotionalhelp.model.QuizResult;
 import com.epam.emotionalhelp.service.QuizResultService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class QuizResultController {
     }
 
     @GetMapping("/{id}")
-    public  List<QuizResultEmotionDto> findQuizResultByAttemptId(@PathVariable Long id) {
+    public List<EmotionalMapDto> findQuizResultByAttemptId(@PathVariable Long id) {
         return quizResultService.findQuizResultByAttemptId(id);
     }
 }
