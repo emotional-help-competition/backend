@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface QuizResultRepository extends JpaRepository<QuizResult, Long> {
     Page<QuizResult> findAll(Pageable pageable);
-    List<QuizResult> findQuizResultsByAttemptId(Long id);
+    List<QuizResult> findAllByAttemptId(Long attemptId);
 }

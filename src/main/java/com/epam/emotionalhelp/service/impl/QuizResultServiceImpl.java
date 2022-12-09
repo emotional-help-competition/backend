@@ -66,9 +66,9 @@ public class QuizResultServiceImpl implements QuizResultService {
     }
 
     @Override
-    public List<QuizResultEmotionDto> findQuizResultByAttemptId(Long id) {
+    public List<QuizResultEmotionDto> findAllByAttemptId(Long id) {
         //Find QuizResult
-        List<QuizResult> list = quizResultRepository.findQuizResultsByAttemptId(id);
+        List<QuizResult> list = quizResultRepository.findAllByAttemptId(id);
         //Create list to return
         List<QuizResultEmotionDto> resultList = new ArrayList<>();
         //Extract Emotion and get Subcategories based on '%'

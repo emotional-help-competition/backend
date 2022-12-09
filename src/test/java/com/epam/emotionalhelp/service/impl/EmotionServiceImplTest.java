@@ -2,7 +2,7 @@ package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
 import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
-import com.epam.emotionalhelp.exceptionhandler.exception.ResourceNotFoundException;
+import com.epam.emotionalhelp.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.service.EmotionService;
