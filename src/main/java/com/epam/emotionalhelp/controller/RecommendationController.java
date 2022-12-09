@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequestMapping("/v1/recommendations")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Recommendation service", description = "api for recommendations after the quiz based on results")
 public class RecommendationController {
     private final RecommendationService recommendationService;
 

@@ -3,6 +3,7 @@ package com.epam.emotionalhelp.controller;
 import com.epam.emotionalhelp.controller.dto.QuizResultEmotionDto;
 import com.epam.emotionalhelp.model.QuizResult;
 import com.epam.emotionalhelp.service.QuizResultService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ_RESULTS;
 @RequestMapping(QUIZ_RESULTS)
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Result service", description = "api for calculating and getting results of quizzes")
 public class QuizResultController {
     private final QuizResultService quizResultService;
 

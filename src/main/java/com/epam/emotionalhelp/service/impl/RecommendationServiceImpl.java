@@ -54,6 +54,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     private Predicate<RecommendationEntity> isInsideInterval(EmotionDto em) {
-        return rec -> rec.getFloor() <= em.getValue() && em.getValue() <= rec.getCeil();
+        final int value = em.getValue();
+        return rec -> rec.getFloor() <= value && value <= rec.getCeil();
     }
 }

@@ -20,12 +20,13 @@ import java.util.function.Supplier;
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
+    private static final Supplier<ResourceNotFoundException> QUESTION_NOT_FOUND =
+            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUESTION_NOT_FOUND);
+    private static final Supplier<ResourceNotFoundException> EMOTION_NOT_FOUND =
+            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.EMOTION_NOT_FOUND);
+
     private final QuestionRepository questionRepository;
     private final EmotionRepository emotionRepository;
-    private final Supplier<RuntimeException> QUESTION_NOT_FOUND =
-            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUESTION_NOT_FOUND);
-    private final Supplier<RuntimeException> EMOTION_NOT_FOUND =
-            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.EMOTION_NOT_FOUND);
 
     @Override
     public Page<QuestionResponseDto> findAll(Pageable pageable) {

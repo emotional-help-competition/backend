@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,7 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ;
 @RequestMapping(path = QUIZ)
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Quiz service", description = "api for management of quizzes")
 public class QuizController {
     private final QuizService quizService;
     private final QuizResultService quizResultService;

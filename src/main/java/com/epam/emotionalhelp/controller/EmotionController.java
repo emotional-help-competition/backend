@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,7 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
 @RequestMapping(path = EMOTIONS)
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Emotion service", description = "api for maintaining basic emotions")
 public class EmotionController {
     private final EmotionService emotionService;
 

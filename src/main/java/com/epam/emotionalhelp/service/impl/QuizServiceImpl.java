@@ -20,12 +20,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
+    private static final Supplier<ResourceNotFoundException> QUIZ_NOT_FOUND =
+            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUIZ_NOT_FOUND);
+    private static final Supplier<ResourceNotFoundException> QUESTION_NOT_FOUND =
+            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUESTION_NOT_FOUND);
+
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
-    private final Supplier<RuntimeException> QUIZ_NOT_FOUND =
-            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUIZ_NOT_FOUND);
-    private final Supplier<RuntimeException> QUESTION_NOT_FOUND =
-            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUESTION_NOT_FOUND);
 
     @Override
     public Page<QuizResponseDto> findAll(Pageable pageable) {

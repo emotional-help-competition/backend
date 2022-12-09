@@ -18,9 +18,10 @@ import java.util.function.Supplier;
 @Service
 @RequiredArgsConstructor
 public class EmotionServiceImpl implements EmotionService {
-    private final EmotionRepository emotionRepository;
-    private final Supplier<ResourceNotFoundException> EMOTION_NOT_FOUND =
+    private static final Supplier<ResourceNotFoundException> EMOTION_NOT_FOUND =
             () -> new ResourceNotFoundException(ResourceNotFoundException.Type.EMOTION_NOT_FOUND);
+
+    private final EmotionRepository emotionRepository;
 
     @Override
     public Page<EmotionResponseDto> findAll(Pageable pageable) {
