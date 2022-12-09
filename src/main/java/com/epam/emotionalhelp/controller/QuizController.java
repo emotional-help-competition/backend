@@ -1,5 +1,6 @@
 package com.epam.emotionalhelp.controller;
 
+import com.epam.emotionalhelp.controller.dto.AttemptDto;
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
 import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuizResponseDto;
@@ -48,7 +49,7 @@ public class QuizController {
     }
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}")
-    public int calculateResult(@PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
+    public AttemptDto calculateResult(@PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
         return quizResultService.calculate(id, emotions);
     }
 
