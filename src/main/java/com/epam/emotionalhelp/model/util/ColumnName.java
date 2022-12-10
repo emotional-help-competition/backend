@@ -39,8 +39,4 @@ public final class ColumnName {
     //CATEGORY table
     public static final String SUBCATEGORY_TABLE_NAME = "subcategory";
     public static final String SUBCATEGORY_WEIGHT = "weight";
-
-    //QUIZ_RESULT_EMOTION linking table
-    public static final String QUIZ_RESULT_EMOTION_TABLE_NAME = "quiz_result_emotion";
-    public static final String QUIZ_RESULT_ID = "quiz_result_id";
 }
