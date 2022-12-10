@@ -1,10 +1,9 @@
 package com.epam.emotionalhelp.service;
 
-import com.epam.emotionalhelp.model.RecommendationEntity;
+import com.epam.emotionalhelp.controller.dto.AppointmentResponseDto;
 
 import java.util.List;
 
 public interface RecommendationService {
-    List<RecommendationEntity> findAllByAttemptId(Long attemptId);
-    List<RecommendationEntity> findAllByEmotionId(Long emotionId);
+    List<AppointmentResponseDto> findAllByAttemptId(Long attemptId);
 }

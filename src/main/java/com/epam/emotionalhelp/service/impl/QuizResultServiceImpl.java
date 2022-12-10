@@ -76,6 +76,7 @@ public class QuizResultServiceImpl implements QuizResultService {
     public List<EmotionalMapDto> findQuizResultsByAttemptId(Long attemptId) {
         //Find QuizResult(Emotion , Overall score)
         var list = quizResultRepository.findAllByAttemptId(attemptId);
+
         //Create list to return
         var resultList = new ArrayList<EmotionalMapDto>();
         //Extract Emotion and get Subcategories based on '%'
