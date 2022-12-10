@@ -2,23 +2,25 @@ package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
 import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
-import com.epam.emotionalhelp.controller.response.ResponseMessage;
-import com.epam.emotionalhelp.exceptionhandler.exception.ResourceNotFoundException;
+import com.epam.emotionalhelp.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.service.EmotionService;
 import com.epam.emotionalhelp.service.mapper.EmotionMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.function.Supplier;
+
 @Service
 @RequiredArgsConstructor
 public class EmotionServiceImpl implements EmotionService {
-    @Autowired
+    private static final Supplier<ResourceNotFoundException> EMOTION_NOT_FOUND =
+            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.EMOTION_NOT_FOUND);
+
     private final EmotionRepository emotionRepository;
 
     @Override
@@ -55,6 +57,6 @@ public class EmotionServiceImpl implements EmotionService {
     }
 
     private Emotion findEmotionById(Long id) {
-        return emotionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
+        return emotionRepository.findById(id).orElseThrow(EMOTION_NOT_FOUND);
     }
 }
