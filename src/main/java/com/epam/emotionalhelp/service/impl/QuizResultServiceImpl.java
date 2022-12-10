@@ -1,11 +1,11 @@
 package com.epam.emotionalhelp.service.impl;
 
+import com.epam.emotionalhelp.controller.dto.AttemptDto;
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
-import com.epam.emotionalhelp.controller.dto.QuizResultEmotionDto;
-import com.epam.emotionalhelp.controller.dto.SubcategoryDto;
+import com.epam.emotionalhelp.controller.dto.EmotionalMapDto;
+import com.epam.emotionalhelp.controller.dto.SubcategoryContainerDto;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.model.EmotionCategory;
-import com.epam.emotionalhelp.model.Quiz;
 import com.epam.emotionalhelp.model.QuizAttempt;
 import com.epam.emotionalhelp.model.QuizResult;
 import com.epam.emotionalhelp.model.Subcategory;
@@ -16,20 +16,27 @@ import com.epam.emotionalhelp.repository.QuizResultRepository;
 import com.epam.emotionalhelp.repository.SubcategoryRepository;
 import com.epam.emotionalhelp.service.QuizResultService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class QuizResultServiceImpl implements QuizResultService {
+    private static final int MAX_SCORE_VALUE = 5;
+    private static final int PERCENTAGE_VALUE = 100;
+    private static final int SUBCATEGORIES_LIMIT_VALUE = 12;
+    private static final int MAX_CONTAINER_SIZE = 3;
+
     private final QuizResultRepository quizResultRepository;
     private final QuizAttemptRepository quizAttemptRepository;
     private final QuizRepository quizRepository;
@@ -42,45 +49,64 @@ public class QuizResultServiceImpl implements QuizResultService {
     }
 
     @Override
-    public int calculate(Long quizId, List<EmotionDto> emotions) {
+    public AttemptDto calculate(Long quizId, List<EmotionDto> emotions) {
         //Find passed Quiz
-        Optional<Quiz> quiz = quizRepository.findById(quizId);
+        var quiz = quizRepository.findById(quizId);
         //Create QuizAttempt object
-        QuizAttempt quizAttempt = new QuizAttempt();
+        var quizAttempt = new QuizAttempt();
         quizAttempt.setCreateDate(LocalDateTime.now());
-        QuizAttempt quizAttemptFinal = quizAttemptRepository.save(quizAttempt);
+        var quizAttemptFinal = quizAttemptRepository.save(quizAttempt);
         //Filter the list to divide data by Emotions
-        Map<EmotionCategory, List<EmotionDto>> filteredList = filterListByEmotions(emotions);
-        Map<Emotion, Integer> emotionPercentages = calculatePercentagesByEmotion(filteredList);
+        var filteredList = filterListByEmotions(emotions);
+        var emotionPercentages = calculatePercentagesByEmotion(filteredList);
         //Get the set of emotions
         for (Map.Entry<Emotion, Integer> entry : emotionPercentages.entrySet()) {
             //Create QuizResult object
-            QuizResult quizResult = new QuizResult();
+            var quizResult = new QuizResult();
             quiz.ifPresent(quizResult::setQuiz);
             quizResult.setAttempt(quizAttemptFinal);
             quizResult.setEmotion(entry.getKey());
             quizResult.setScore(entry.getValue());
             quizResultRepository.save(quizResult);
         }
-        return Math.toIntExact(quizAttempt.getId());
+        return new AttemptDto(quizAttempt.getId());
     }
 
     @Override
-    public List<QuizResultEmotionDto> findQuizResultByAttemptId(Long id) {
-        //Find QuizResult
-        List<QuizResult> list = quizResultRepository.findQuizResultsByAttemptId(id);
+    public List<EmotionalMapDto> findQuizResultsByAttemptId(Long attemptId) {
+        //Find QuizResult(Emotion , Overall score)
+        var list = quizResultRepository.findAllByAttemptId(attemptId);
+
         //Create list to return
-        List<QuizResultEmotionDto> resultList = new ArrayList<>();
+        var resultList = new ArrayList<EmotionalMapDto>();
         //Extract Emotion and get Subcategories based on '%'
         for (QuizResult quizResult : list) {
-            Emotion emotion = quizResult.getEmotion();
-            //Find All Subcategories
-            List<Subcategory> subcategories = subcategoryRepository.findAllSubcategories(quizResult.getScore(), emotion.getId());
+            var emotion = quizResult.getEmotion();
             //Create QuizResultEmotionDto
-            QuizResultEmotionDto quizResultEmotionDto = new QuizResultEmotionDto();
+            var quizResultEmotionDto = new EmotionalMapDto();
             quizResultEmotionDto.setCategory(emotion.getDescription());
-            List<SubcategoryDto> subcategoryList = fillList(subcategories);
-            quizResultEmotionDto.setSubCategories(subcategoryList);
+            //Find All Subcategories
+            //If score is equal to 0 it means that list with subcategories should be empty
+            if (quizResult.getScore() == 0) {
+                quizResultEmotionDto.setSubCategories(new ArrayList<>());
+            } else {
+                int percentage = (int) (((double) quizResult.getScore() / MAX_SCORE_VALUE) * PERCENTAGE_VALUE);
+                var allSubcategories = subcategoryRepository.findAllSubcategories(percentage, emotion.getId());
+                var subcategories = allSubcategories
+                        .stream()
+                        .limit(SUBCATEGORIES_LIMIT_VALUE)
+                        .sorted(Comparator.comparing(Subcategory::getWeight))
+                        .collect(Collectors.toList());
+                var subcategoryList = ListUtils.partition(subcategories, MAX_CONTAINER_SIZE);
+                var categoryList = new ArrayList<SubcategoryContainerDto>();
+                for (List<Subcategory> partition : subcategoryList) {
+                    var category = partition.stream().map(Subcategory::getDescription).collect(Collectors.toSet());
+                    double score = (double) partition.stream().mapToInt(Subcategory::getWeight).max().orElse(0) / PERCENTAGE_VALUE;
+                    categoryList.add(new SubcategoryContainerDto(category, score));
+                }
+                quizResultEmotionDto.setSubCategories(categoryList);
+            }
+
             //Add QuizResultEmotionDto to the List
             resultList.add(quizResultEmotionDto);
         }
@@ -89,52 +115,50 @@ public class QuizResultServiceImpl implements QuizResultService {
 
     private Map<EmotionCategory, List<EmotionDto>> filterListByEmotions(List<EmotionDto> emotions) {
         Map<EmotionCategory, List<EmotionDto>> map = new HashMap<>();
+        //Fill map with EMOTIONS and its SUBCATEGORIES
         for (EmotionDto emotionDto : emotions) {
             //Find emotion
-            Optional<Emotion> optionalEmotion = emotionRepository.findById(emotionDto.getEmotionId());
-            Emotion emotion = new Emotion();
-            if (optionalEmotion.isPresent()) {
-                emotion = optionalEmotion.get();
-            }
+            var emotion = emotionRepository.findById(emotionDto.getEmotionId()).orElse(new Emotion());
             //Extract description of found emotion
             String description = emotion.getDescription().toUpperCase();
             //Check if map already contains EMOTION
             if (map.containsKey(EmotionCategory.valueOf(description))) {
                 map.get(EmotionCategory.valueOf(description)).add(emotionDto);
             } else {
-                List<EmotionDto> list = new ArrayList<>();
+                var list = new ArrayList<EmotionDto>();
                 list.add(emotionDto);
                 map.put(EmotionCategory.valueOf(description), list);
+            }
+        }
+        //Fill map with EMOTIONS which are not included in the input list
+        int n = 6 - map.values().size();
+        for (int i = 0; i < n; i++) {
+            for (EmotionCategory emotionCategory : EmotionCategory.values()) {
+                if (!map.containsKey(emotionCategory)) {
+                    map.put(emotionCategory, new ArrayList<>());
+                    break;
+                }
             }
         }
         return map;
     }
 
-    private Map<Emotion, Integer> calculatePercentagesByEmotion(Map<EmotionCategory, List<EmotionDto>> filteredList) {
+    private Map<Emotion, Integer> calculatePercentagesByEmotion
+            (Map<EmotionCategory, List<EmotionDto>> filteredList) {
         Map<Emotion, Integer> map = new HashMap<>();
         for (Map.Entry<EmotionCategory, List<EmotionDto>> entry : filteredList.entrySet()) {
-            Emotion emotion = emotionRepository.findEmotionByDescription(entry.getKey().getName());
+            var emotion = emotionRepository.findEmotionByDescription(entry.getKey().getName());
             map.put(emotion, calculateListPercentages(entry.getValue()));
         }
         return map;
     }
 
     private int calculateListPercentages(List<EmotionDto> list) {
-        int sum = 0;
-        for (EmotionDto emotionDto : list) {
-            sum += emotionDto.getValue();
+        //If there weren't questions for particular EMOTION size of the list will be 0
+        if (list.size() == 0) {
+            return 0;
         }
+        int sum = list.stream().mapToInt(EmotionDto::getValue).sum();
         return sum / list.size();
-    }
-
-    private List<SubcategoryDto> fillList(List<Subcategory> list) {
-        List<SubcategoryDto> result = new ArrayList<>();
-        for (Subcategory subcategory : list) {
-            SubcategoryDto subcategoryDto = new SubcategoryDto();
-            subcategoryDto.setEmotions(subcategory.getDescription());
-            subcategoryDto.setScore(Double.valueOf((subcategory.getWeight())));
-            result.add(subcategoryDto);
-        }
-        return result;
     }
 }
