@@ -106,6 +106,7 @@ public class QuizResultServiceImpl implements QuizResultService {
                 }
                 quizResultEmotionDto.setSubCategories(categoryList);
             }
+
             //Add QuizResultEmotionDto to the List
             resultList.add(quizResultEmotionDto);
         }
@@ -160,5 +161,4 @@ public class QuizResultServiceImpl implements QuizResultService {
         int sum = list.stream().mapToInt(EmotionDto::getValue).sum();
         return sum / list.size();
     }
-
 }
