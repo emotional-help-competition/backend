@@ -37,6 +37,8 @@ public class QuizResultServiceImpl implements QuizResultService {
     private static final int SUBCATEGORIES_LIMIT_VALUE = 12;
     private static final int MAX_CONTAINER_SIZE = 3;
 
+    private static final int LIST_SLICE_SIZE = 6;
+
     private final QuizResultRepository quizResultRepository;
     private final QuizAttemptRepository quizAttemptRepository;
     private final QuizRepository quizRepository;
@@ -112,8 +114,14 @@ public class QuizResultServiceImpl implements QuizResultService {
         return resultList;
     }
 
-    private Map<EmotionCategory, List<EmotionDto>> filterListByEmotions(List<EmotionDto> emotions) {
+    private Map<EmotionCategory, List<EmotionDto>> filterListByEmotions(List<EmotionDto> inputEmotions) {
         Map<EmotionCategory, List<EmotionDto>> map = new HashMap<>();
+        List<EmotionDto> emotions;
+        if (inputEmotions.size() > LIST_SLICE_SIZE) {
+            emotions = new ArrayList<>(inputEmotions.subList(0, LIST_SLICE_SIZE));
+        } else {
+            emotions = new ArrayList<>(inputEmotions);
+        }
         //Fill map with EMOTIONS and its SUBCATEGORIES
         for (EmotionDto emotionDto : emotions) {
             //Find emotion
@@ -145,10 +153,10 @@ public class QuizResultServiceImpl implements QuizResultService {
     private Map<Emotion, Integer> calculatePercentagesByEmotion
             (Map<EmotionCategory, List<EmotionDto>> filteredList) {
         Map<Emotion, Integer> map = new HashMap<>();
-        for (Map.Entry<EmotionCategory, List<EmotionDto>> entry : filteredList.entrySet()) {
-            var emotion = emotionRepository.findEmotionByDescription(entry.getKey().getName());
-            map.put(emotion, calculateListPercentages(entry.getValue()));
-        }
+        filteredList.forEach((key, value) -> {
+            var emotion = emotionRepository.findEmotionByDescription(key.getName());
+            map.put(emotion, calculateListPercentages(value));
+        });
         return map;
     }
 
