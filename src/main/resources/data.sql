@@ -160,7 +160,7 @@ VALUES (1, 'rabies', 5),
        (9, 'embarrassed', 35),
        (9, 'insignificant', 85),
        (9, 'helpless', 95),
-       (9, 'insecure', 100),
+       (9, 'insecure', 100);
 
 
 INSERT INTO quiz_attempt()
