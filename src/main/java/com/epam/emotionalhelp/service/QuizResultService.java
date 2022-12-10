@@ -15,4 +15,5 @@ public interface QuizResultService {
     AttemptDto calculate(Long quizId, List<EmotionDto> emotions);
 
     List<EmotionalMapDto> findQuizResultsByAttemptId(Long id);
+
 }

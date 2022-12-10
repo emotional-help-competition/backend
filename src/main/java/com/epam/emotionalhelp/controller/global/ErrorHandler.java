@@ -50,7 +50,7 @@ public class ErrorHandler {
         return "You have no access";
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public String exception(Exception e) {
         log.error(e.getMessage(), e);
