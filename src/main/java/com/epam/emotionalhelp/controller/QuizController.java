@@ -32,13 +32,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ;
+import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZZES;
 
 /**
  * The type Quiz controller.
  */
 @RestController
-@RequestMapping(path = QUIZ)
+@RequestMapping(path = QUIZZES)
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Quiz service", description = "api for management of quizzes")

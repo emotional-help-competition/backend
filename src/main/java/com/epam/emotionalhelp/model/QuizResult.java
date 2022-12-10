@@ -1,6 +1,5 @@
 package com.epam.emotionalhelp.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

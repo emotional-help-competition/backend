@@ -1,6 +1,5 @@
 package com.epam.emotionalhelp.model;
 
-
 public enum EmotionCategory {
     ANGER("anger"),
     FEAR("fear"),
@@ -11,7 +10,6 @@ public enum EmotionCategory {
     ACCEPTED("accepted"),
     AFRAID("afraid"),
     SCARED("scared");
-
 
     private final String name;
 

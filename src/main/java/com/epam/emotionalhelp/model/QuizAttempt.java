@@ -18,7 +18,6 @@ import java.util.Set;
 
 import static com.epam.emotionalhelp.model.util.ColumnName.*;
 
-
 @Builder
 @Getter
 @Setter

@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+import static com.epam.emotionalhelp.controller.util.EndpointName.RECOMMENDATIONS;
+
 /**
  * The type Recommendation controller.
  */
 @RestController
-@RequestMapping("/v1/recommendations")
+@RequestMapping(RECOMMENDATIONS)
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Recommendation service", description = "api for recommendations after the quiz based on results")
