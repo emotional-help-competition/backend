@@ -28,6 +28,6 @@ public class QuizResultController {
 
     @GetMapping("/{id}")
     public List<EmotionalMapDto> findQuizResultByAttemptId(@PathVariable Long id) {
-        return quizResultService.findQuizResultByAttemptId(id);
+        return quizResultService.findQuizResultsByAttemptId(id);
     }
 }

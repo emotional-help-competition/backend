@@ -73,7 +73,7 @@ public class QuizResultServiceImpl implements QuizResultService {
     }
 
     @Override
-    public List<EmotionalMapDto> findQuizResultByAttemptId(Long attemptId) {
+    public List<EmotionalMapDto> findQuizResultsByAttemptId(Long attemptId) {
         //Find QuizResult(Emotion , Overall score)
         var list = quizResultRepository.findQuizResultsByAttemptId(attemptId);
         //Create list to return
