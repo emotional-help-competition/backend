@@ -1,6 +1,6 @@
 package com.epam.emotionalhelp.controller;
 
-import com.epam.emotionalhelp.controller.dto.QuizResultEmotionDto;
+import com.epam.emotionalhelp.controller.dto.EmotionalMapDto;
 import com.epam.emotionalhelp.model.QuizResult;
 import com.epam.emotionalhelp.service.QuizResultService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -32,8 +31,8 @@ public class QuizResultController {
         return quizResultService.findAll(pageable);
     }
 
-    @GetMapping("/{attemptId}")
-    public List<QuizResultEmotionDto> findByAttemptId(@Min(1) @PathVariable Long attemptId) {
-        return quizResultService.findAllByAttemptId(attemptId);
+    @GetMapping("/{id}")
+    public List<EmotionalMapDto> findQuizResultByAttemptId(@PathVariable Long id) {
+        return quizResultService.findQuizResultsByAttemptId(id);
     }
 }
