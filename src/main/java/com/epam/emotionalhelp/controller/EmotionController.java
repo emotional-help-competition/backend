@@ -26,6 +26,9 @@ import javax.validation.constraints.Min;
 
 import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
 
+/**
+ * The basic Emotions controller.
+ */
 @RestController
 @RequestMapping(path = EMOTIONS)
 @RequiredArgsConstructor
@@ -34,6 +37,12 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.EMOTIONS;
 public class EmotionController {
     private final EmotionService emotionService;
 
+    /**
+     * Find all page.
+     *
+     * @param pageable the pageable
+     * @return the page
+     */
     @Operation(summary = "Get all emotions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Emotions were found",
@@ -47,6 +56,12 @@ public class EmotionController {
         return emotionService.findAll(pageable);
     }
 
+    /**
+     * Find by id emotion response dto.
+     *
+     * @param id the id
+     * @return the emotion response dto
+     */
     @Operation(summary = "Get the emotion")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Emotion was found",
@@ -62,6 +77,13 @@ public class EmotionController {
         return emotionService.findById(id);
     }
 
+    /**
+     * Update emotion response dto.
+     *
+     * @param id                the id
+     * @param emotionRequestDto the emotion request dto
+     * @return the emotion response dto
+     */
     @Operation(summary = "Update the emotion")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Emotion was updated",

@@ -18,6 +18,9 @@ import java.util.List;
 
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ_RESULTS;
 
+/**
+ * The type Quiz result controller.
+ */
 @RestController
 @RequestMapping(QUIZ_RESULTS)
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class QuizResultController {
     }
 
     @GetMapping("/{id}")
-    public List<EmotionalMapDto> findQuizResultByAttemptId(@PathVariable Long id) {
+    public List<EmotionalMapDto> findQuizResultByAttemptId(@Min(1) @PathVariable Long id) {
         return quizResultService.findQuizResultsByAttemptId(id);
     }
 }

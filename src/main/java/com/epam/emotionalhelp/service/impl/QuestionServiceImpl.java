@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.function.Supplier;
 
 
+/**
+ * The type Question service.
+ */
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {

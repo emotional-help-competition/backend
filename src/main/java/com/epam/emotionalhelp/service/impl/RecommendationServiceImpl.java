@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * The type Recommendation service.
+ */
 @Service
 @RequiredArgsConstructor
 public class RecommendationServiceImpl implements RecommendationService {

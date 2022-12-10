@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+/**
+ * The type Recommendation controller.
+ */
 @RestController
 @RequestMapping("/v1/recommendations")
 @RequiredArgsConstructor
@@ -26,6 +29,12 @@ import java.util.List;
 public class RecommendationController {
     private final RecommendationService recommendationService;
 
+    /**
+     * Find all recommendations by attempt id.
+     *
+     * @param attemptId the attempt id
+     * @return the list
+     */
     @Operation(summary = "Get recommendations for specified attempt id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of recommendations. Empty if no such attempt",

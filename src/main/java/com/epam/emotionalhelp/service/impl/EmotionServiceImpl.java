@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Supplier;
 
+/**
+ * The basics Emotion service.
+ */
 @Service
 @RequiredArgsConstructor
 public class EmotionServiceImpl implements EmotionService {

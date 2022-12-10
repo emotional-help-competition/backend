@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * The type Quiz result service.
+ */
 @Service
 @RequiredArgsConstructor
 public class QuizResultServiceImpl implements QuizResultService {
