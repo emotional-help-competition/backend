@@ -34,6 +34,9 @@ import java.util.List;
 
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUIZ;
 
+/**
+ * The type Quiz controller.
+ */
 @RestController
 @RequestMapping(path = QUIZ)
 @RequiredArgsConstructor
@@ -43,6 +46,12 @@ public class QuizController {
     private final QuizService quizService;
     private final QuizResultService quizResultService;
 
+    /**
+     * Find all page.
+     *
+     * @param pageable the pageable
+     * @return the page
+     */
     @Operation(summary = "Get all quizzes")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quizzes were found",
@@ -56,6 +65,12 @@ public class QuizController {
         return quizService.findAll(pageable);
     }
 
+    /**
+     * Find by id quiz response dto.
+     *
+     * @param id the id
+     * @return the quiz response dto
+     */
     @Operation(summary = "Get the quiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quiz was found",
@@ -69,6 +84,12 @@ public class QuizController {
         return quizService.findById(id);
     }
 
+    /**
+     * Create quiz response dto.
+     *
+     * @param quizRequestDto the quiz request dto
+     * @return the quiz response dto
+     */
     @Operation(summary = "Create the quiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quiz was created",
@@ -83,6 +104,13 @@ public class QuizController {
         return quizService.create(quizRequestDto);
     }
 
+    /**
+     * Calculate result attempt dto.
+     *
+     * @param id       the id
+     * @param emotions the emotions
+     * @return the attempt dto
+     */
     @Operation(summary = "Get quiz results")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns attempt id for these results",
@@ -98,6 +126,13 @@ public class QuizController {
         return quizResultService.calculate(id, emotions);
     }
 
+    /**
+     * Update quiz response dto.
+     *
+     * @param id             the id
+     * @param quizRequestDto the quiz request dto
+     * @return the quiz response dto
+     */
     @Operation(summary = "Update the quiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quiz was updated",
@@ -111,6 +146,11 @@ public class QuizController {
         return quizService.update(id, quizRequestDto);
     }
 
+    /**
+     * Delete.
+     *
+     * @param id the id
+     */
     @Operation(summary = "Delete the quiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Quiz was deleted",

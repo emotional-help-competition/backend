@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * The type Quiz service.
+ */
 @Service
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {

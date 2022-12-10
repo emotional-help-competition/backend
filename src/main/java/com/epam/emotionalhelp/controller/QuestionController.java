@@ -31,6 +31,9 @@ import javax.validation.constraints.Min;
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
 
 
+/**
+ * The type Question controller.
+ */
 @RestController
 @RequestMapping(path = QUESTIONS)
 @RequiredArgsConstructor
@@ -39,6 +42,12 @@ import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
 public class QuestionController {
     private final QuestionService questionService;
 
+    /**
+     * Find all page.
+     *
+     * @param pageable the pageable
+     * @return the page
+     */
     @Operation(summary = "Get list of questions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Received list of questions",
@@ -51,6 +60,12 @@ public class QuestionController {
         return questionService.findAll(pageable);
     }
 
+    /**
+     * Find by id question response dto.
+     *
+     * @param id the id
+     * @return the question response dto
+     */
     @Operation(summary = "Get question by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Received the question",
@@ -65,6 +80,12 @@ public class QuestionController {
         return questionService.findById(id);
     }
 
+    /**
+     * Create question response dto.
+     *
+     * @param questionRequestDto the question request dto
+     * @return the question response dto
+     */
     @Operation(summary = "Create the question")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Question created successfully",
@@ -78,6 +99,13 @@ public class QuestionController {
         return questionService.create(questionRequestDto);
     }
 
+    /**
+     * Update question response dto.
+     *
+     * @param id                 the id
+     * @param questionRequestDto the question request dto
+     * @return the question response dto
+     */
     @Operation(summary = "Update the question")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Question updated successfully",
@@ -92,6 +120,11 @@ public class QuestionController {
         return questionService.update(id, questionRequestDto);
     }
 
+    /**
+     * Delete.
+     *
+     * @param id the id
+     */
     @Operation(summary = "Delete the question")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Question deleted successfully",
