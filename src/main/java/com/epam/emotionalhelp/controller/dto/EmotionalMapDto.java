@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class QuizResultEmotionDto {
+public class EmotionalMapDto {
     private String category;
-    private List<SubcategoryDto> subCategories;
+    private List<SubcategoryContainerDto> subCategories;
 }
