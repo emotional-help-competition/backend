@@ -43,7 +43,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .filter(isInsideInterval(emotionDto));
     }
 
-    private static class Mapper {
+    protected static class Mapper {
         private static AppointmentResponseDto toAppointmentResponseDto(@NonNull AppointmentEntity appointment) {
             return AppointmentResponseDto.builder()
                     .type(appointment.getAppointmentType().getDescription())
@@ -53,7 +53,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .build();
         }
 
-        private static EmotionDto toEmotionDto(@NonNull QuizResult quizResult) {
+        static EmotionDto toEmotionDto(@NonNull QuizResult quizResult) {
             return EmotionDto.builder()
                     .emotionId(quizResult.getEmotion().getId())
                     .value(quizResult.getScore())
