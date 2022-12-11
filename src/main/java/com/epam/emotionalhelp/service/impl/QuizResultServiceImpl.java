@@ -43,11 +43,13 @@ import static com.epam.emotionalhelp.service.impl.QuizResultServiceImpl.QuizResu
 @Service
 @RequiredArgsConstructor
 public class QuizResultServiceImpl implements QuizResultService {
+
     private static final int MAX_SCORE_VALUE = 5;
     private static final int PERCENTAGE_VALUE = 100;
     private static final int SUBCATEGORIES_LIMIT_VALUE = 12;
     private static final int MAX_CONTAINER_SIZE = 3;
     private static final int LIST_SLICE_SIZE = 6;
+
     private final QuizResultRepository quizResultRepository;
     private final QuizAttemptRepository quizAttemptRepository;
     private final QuizRepository quizRepository;
@@ -64,12 +66,15 @@ public class QuizResultServiceImpl implements QuizResultService {
     public AttemptDto calculate(Long quizId, List<EmotionDto> emotions) {
         // 1. Find passed Quiz
         var quiz = quizRepository.findById(quizId);
+
         // 2. Create QuizAttempt object
         var quizAttempt = QuizAttempt.builder().createDate(LocalDateTime.now()).build();
         var quizAttemptFinal = quizAttemptRepository.save(quizAttempt);
+
         // 3. Filter the list to divide data by Emotions
         var emotionsMap = filterByEmotions(emotions);
         var emotionPercentages = calculateEmotionPercentage(emotionsMap);
+
         // 4. Get the set of emotions
         emotionPercentages.forEach((emotion, score) -> {
             var quizResult = QuizResult.builder()
@@ -86,13 +91,16 @@ public class QuizResultServiceImpl implements QuizResultService {
     @Override
     public List<EmotionalMapDto> findQuizResultsByAttemptId(Long attemptId) {
         var resultList = new ArrayList<EmotionalMapDto>();
+
         // 1. Find QuizResult(Emotion, Overall score)
         var quizResults = quizResultRepository.findAllByAttemptId(attemptId);
+
         // 2. Extract emotion and get subcategories based on '%'
         quizResults.forEach(quizResult -> {
             var quizResultEmotionDto = new EmotionalMapDto();
             var emotion = quizResult.getEmotion();
             quizResultEmotionDto.setCategory(emotion.getDescription());
+
             // find all subcategories
             // if score is equal to 0 it means that list with subcategories should be empty
             if (quizResult.getScore() == 0) {
@@ -121,12 +129,14 @@ public class QuizResultServiceImpl implements QuizResultService {
     private Map<EmotionCategory, List<EmotionDto>> filterByEmotions(final List<EmotionDto> inputEmotions) {
         // 1. Fill map with EMOTIONS and its SUBCATEGORIES
         final Map<EmotionCategory, List<EmotionDto>> result = new HashMap<>();
+
         // 2. Limit input emotions by 6 maximum
         var emotions = new ArrayList<>(inputEmotions.subList(0, LIST_SLICE_SIZE));
         emotions.forEach(emotionDto -> {
             // find emotion and extract description
             var emotion = emotionRepository.findById(emotionDto.getEmotionId()).orElse(new Emotion());
             var description = emotion.getDescription().toUpperCase();
+
             // check if map already contains EMOTION
             var category = EmotionCategory.valueOf(description);
             if (result.containsKey(category)) {
@@ -137,6 +147,7 @@ public class QuizResultServiceImpl implements QuizResultService {
                 result.put(category, data);
             }
         });
+
         // 3. Fill map with EMOTIONS which are not included in the input list
         final int maxSize = LIST_SLICE_SIZE - result.values().size();
         IntStream.range(0, maxSize).mapToObj(i -> result).forEach(QuizResultUtil::fillMapByEmptyEmotions);

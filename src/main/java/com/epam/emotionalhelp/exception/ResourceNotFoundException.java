@@ -13,7 +13,6 @@ public class ResourceNotFoundException extends RuntimeException {
     public enum Type {
         QUIZ_NOT_FOUND,
         QUESTION_NOT_FOUND,
-        EMOTION_NOT_FOUND,
-        UNKNOWN_ENTITY_NOT_FOUND
+        EMOTION_NOT_FOUND
     }
 }
