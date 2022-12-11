@@ -3,11 +3,13 @@ package com.epam.emotionalhelp.service.impl;
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
 import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
 import com.epam.emotionalhelp.controller.dto.SubcategoryContainerDto;
+import com.epam.emotionalhelp.controller.dto.SubcategoryDto;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.model.Subcategory;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.repository.QuizResultRepository;
 import com.epam.emotionalhelp.repository.SubcategoryRepository;
+import com.epam.emotionalhelp.service.mapper.RecommendationMapper;
 import lombok.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -24,61 +26,29 @@ public class QuizResultServiceStreamApproach {
     private final SubcategoryRepository subcategoryRepository;
 
     public void f(Long attemptId) {
-        List<EmotionDto> emotions = quizResultRepository.findAllByAttemptId(attemptId).stream()
-                .map(RecommendationServiceImpl.Mapper::toEmotionDto)
-                .collect(Collectors.toList());
-
-        Map<Emotion, List<SubcategoryDto>> emotionMap = emotions.stream()
+        Map<Emotion, List<SubcategoryDto>> emotionMap = quizResultRepository.findAllByAttemptId(attemptId).stream()
+                .map(RecommendationMapper::toEmotionDto)
                 .collect(Collectors.toMap(this::getEmotion,
                         this::getListsForEmotion));
 
-        emotionMap.forEach((k, v) -> System.out.println(k + ">" + v));
-
+        for (Map.Entry<Emotion, List<SubcategoryDto>> entry : emotionMap.entrySet()) {
+            Emotion k = entry.getKey();
+            List<SubcategoryDto> v = entry.getValue();
+            System.out.println(k);
+            v.forEach(x -> System.out.println("\t" + x));
+        }
     }
 
     private List<SubcategoryDto> getListsForEmotion(EmotionDto emotion) {
-        List<Subcategory> subcategories = getSubcategoriesForEmotion(emotion);
-        final int quantity = getHexagonsQuantity(subcategories.size());
-        Collection<List<Subcategory>> hexagonList = subcategories.stream()
-                .collect(Collectors.groupingBy(emotionDto -> new Random().nextInt(quantity)))
-                .values();
-
-        return hexagonList.stream()
-                .map(subcategoryList -> {
-
-                    ArrayList<EmotionRequestDto> emotionRequestDtos = new ArrayList<>();
-
-                    for (Subcategory sub : subcategoryList) {
-                        EmotionRequestDto emotionRequestDto = new EmotionRequestDto();
-                        emotionRequestDto.setDescription(sub.getDescription());
-                        emotionRequestDtos.add(emotionRequestDto);
-                    }
-
-                    Double score = subcategoryList.stream()
-                            .mapToInt(Subcategory::getWeight)
-                            .average()
-                            .orElse(0);
-
-                    return SubcategoryDto.builder()
-                            .emotions(emotionRequestDtos)
-                            .score(score)
-                            .build();
-                })
+        return splitToHexagons(subcategoryRepository.findAllSubcategories(emotion.getValue(), emotion.getEmotionId()))
+                .stream()
+                .map(this::getSubcategoryDto)
                 .collect(Collectors.toList());
-
-    }
-
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    static class SubcategoryDto {
-        private Collection<EmotionRequestDto> emotions;
-        private Double score;
     }
 
     /**
-     * We expect a list of subcategory with size <= 12;
+     * We expect a list of subcategory with size <= hexagonsNumber * hexagonCapacity;
+     * Example:
      * 4 hexagon * 3 category;
      * 0 cat - 0 hex;
      * 1..3 cat - 1 hex;
@@ -86,20 +56,44 @@ public class QuizResultServiceStreamApproach {
      * 7..9 cat - 3 hex;
      * 10..12 cat - 4 hex;
      */
-    private int getHexagonsQuantity(int arraySize) {
-        return (int) Math.ceil((double) arraySize / 3);
+    private List<List<Subcategory>> splitToHexagons(List<Subcategory> subcategories) {
+
+        int hexagonsNumber = 4;
+        int hexagonCapacity = 3;
+
+        List<List<Subcategory>> complexList = new ArrayList<>();
+
+        final int size = subcategories.size();
+        int pivot = 0;
+
+        for (int i = 0; i < hexagonsNumber; i++) {
+            int newPivot = pivot + hexagonCapacity;
+            if (newPivot > size) {
+                complexList.add(subcategories.subList(pivot, size));
+                break;
+            }
+            complexList.add(subcategories.subList(pivot, newPivot));
+            pivot = newPivot;
+        }
+        return complexList;
+    }
+
+    private SubcategoryDto getSubcategoryDto(List<Subcategory> subcategoryList) {
+        return SubcategoryDto.builder()
+                .emotions(subcategoryList.stream()
+                        .map(Subcategory::getDescription)
+                        .map(EmotionRequestDto::new)
+                        .collect(Collectors.toList()))
+                .score(subcategoryList.stream()
+                        .mapToInt(Subcategory::getWeight)
+                        .average()
+                        .orElse(0))
+                .build();
     }
 
     private Emotion getEmotion(EmotionDto emotionDto) {
         return emotionRepository.findById(emotionDto.getEmotionId())
                 .get();
-    }
-
-    private List<Subcategory> getSubcategoriesForEmotion(EmotionDto emotionDto) {
-        return subcategoryRepository.findAll().stream()
-                .filter(subcategory -> subcategory.getEmotion().getId().equals(emotionDto.getEmotionId()))
-                .filter(subcategory -> subcategory.getWeight() <= emotionDto.getValue())
-                .collect(Collectors.toList());
     }
 
     @Bean
@@ -108,5 +102,4 @@ public class QuizResultServiceStreamApproach {
             serv.f(1L);
         };
     }
-
 }

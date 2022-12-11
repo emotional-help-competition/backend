@@ -2,13 +2,11 @@ package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.AppointmentResponseDto;
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
-import com.epam.emotionalhelp.model.AppointmentEntity;
-import com.epam.emotionalhelp.model.QuizResult;
 import com.epam.emotionalhelp.model.RecommendationEntity;
 import com.epam.emotionalhelp.repository.QuizResultRepository;
 import com.epam.emotionalhelp.repository.RecommendationRepository;
 import com.epam.emotionalhelp.service.RecommendationService;
-import lombok.NonNull;
+import com.epam.emotionalhelp.service.mapper.RecommendationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,34 +29,16 @@ public class RecommendationServiceImpl implements RecommendationService {
     @Transactional
     public List<AppointmentResponseDto> findAllByAttemptId(Long attemptId) {
         return quizResultRepository.findAllByAttemptId(attemptId).stream()
-                .map(Mapper::toEmotionDto)
+                .map(RecommendationMapper::toEmotionDto)
                 .flatMap(this::getRecommendationsForEmotionDto)
                 .map(RecommendationEntity::getAppointment)
-                .map(Mapper::toAppointmentResponseDto)
+                .map(RecommendationMapper::toAppointmentResponseDto)
                 .collect(Collectors.toList());
     }
 
     private Stream<RecommendationEntity> getRecommendationsForEmotionDto(EmotionDto emotionDto) {
         return recommendationRepository.findAllByEmotionId(emotionDto.getEmotionId()).stream()
                 .filter(isInsideInterval(emotionDto));
-    }
-
-    protected static class Mapper {
-        private static AppointmentResponseDto toAppointmentResponseDto(@NonNull AppointmentEntity appointment) {
-            return AppointmentResponseDto.builder()
-                    .type(appointment.getAppointmentType().getDescription())
-                    .icon(appointment.getIcon())
-                    .description(appointment.getDescription())
-                    .link(appointment.getLink())
-                    .build();
-        }
-
-        static EmotionDto toEmotionDto(@NonNull QuizResult quizResult) {
-            return EmotionDto.builder()
-                    .emotionId(quizResult.getEmotion().getId())
-                    .value(quizResult.getScore())
-                    .build();
-        }
     }
 
     private Predicate<RecommendationEntity> isInsideInterval(EmotionDto emotionDto) {
