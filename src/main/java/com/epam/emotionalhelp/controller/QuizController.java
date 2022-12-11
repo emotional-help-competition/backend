@@ -4,6 +4,7 @@ import com.epam.emotionalhelp.controller.dto.AttemptDto;
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
 import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuizResponseDto;
+import com.epam.emotionalhelp.controller.util.OpenApi;
 import com.epam.emotionalhelp.model.Quiz;
 import com.epam.emotionalhelp.service.QuizResultService;
 import com.epam.emotionalhelp.service.QuizService;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,9 +57,9 @@ public class QuizController {
     @Operation(summary = "Get all quizzes")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quizzes were found",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Quiz.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @GetMapping
@@ -74,9 +76,9 @@ public class QuizController {
     @Operation(summary = "Get the quiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quiz was found",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Quiz.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @GetMapping("/{id}")
@@ -93,9 +95,9 @@ public class QuizController {
     @Operation(summary = "Create the quiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quiz was created",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Quiz.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @ResponseStatus(HttpStatus.CREATED)
@@ -114,9 +116,9 @@ public class QuizController {
     @Operation(summary = "Get quiz results")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns attempt id for these results",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Quiz.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @ResponseStatus(HttpStatus.CREATED)
@@ -136,9 +138,9 @@ public class QuizController {
     @Operation(summary = "Update the quiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quiz was updated",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Quiz.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @PatchMapping("/{id}")
@@ -154,9 +156,9 @@ public class QuizController {
     @Operation(summary = "Delete the quiz")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Quiz was deleted",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Quiz.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -2,6 +2,7 @@ package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
 import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
+import com.epam.emotionalhelp.controller.util.OpenApi;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.service.EmotionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -46,9 +48,9 @@ public class EmotionController {
     @Operation(summary = "Get all emotions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Emotions were found",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Emotion.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @GetMapping
@@ -65,9 +67,9 @@ public class EmotionController {
     @Operation(summary = "Get the emotion")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Emotion was found",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Emotion.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "No such emotion",
                     content = @Content),
@@ -87,9 +89,9 @@ public class EmotionController {
     @Operation(summary = "Update the emotion")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Emotion was updated",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Emotion.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @PatchMapping("/{id}")

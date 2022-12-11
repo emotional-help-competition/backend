@@ -2,6 +2,7 @@ package com.epam.emotionalhelp.controller;
 
 import com.epam.emotionalhelp.controller.dto.QuestionRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuestionResponseDto;
+import com.epam.emotionalhelp.controller.util.OpenApi;
 import com.epam.emotionalhelp.model.Question;
 import com.epam.emotionalhelp.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,10 +53,8 @@ public class QuestionController {
     @Operation(summary = "Get list of questions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Received list of questions",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Question.class))}),
-            @ApiResponse(responseCode = "500", description = "Error on the server",
-                    content = @Content)})
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = Question.class))})})
     @GetMapping
     public Page<QuestionResponseDto> findAll(Pageable pageable) {
         return questionService.findAll(pageable);
@@ -69,11 +69,9 @@ public class QuestionController {
     @Operation(summary = "Get question by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Received the question",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Question.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Question not found",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content)})
     @GetMapping("/{id}")
     public QuestionResponseDto findById(@Min(1) @PathVariable Long id) {
@@ -89,9 +87,9 @@ public class QuestionController {
     @Operation(summary = "Create the question")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Question created successfully",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Question.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content)})
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -109,9 +107,9 @@ public class QuestionController {
     @Operation(summary = "Update the question")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Question updated successfully",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Question.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters provided",
+            @ApiResponse(responseCode = "400", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @PatchMapping("/{id}")
@@ -128,9 +126,9 @@ public class QuestionController {
     @Operation(summary = "Delete the question")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Question deleted successfully",
-                    content = {@Content(mediaType = "application/json",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Question.class))}),
-            @ApiResponse(responseCode = "404", description = "Invalid id supplied",
+            @ApiResponse(responseCode = "404", description = OpenApi.INVALID_PARAMETERS,
                     content = @Content),
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)

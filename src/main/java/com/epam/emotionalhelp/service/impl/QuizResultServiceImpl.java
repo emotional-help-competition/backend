@@ -165,7 +165,7 @@ public class QuizResultServiceImpl implements QuizResultService {
 
     private int calculateListPercentages(List<EmotionDto> list) {
         //If there weren't questions for particular EMOTION size of the list will be 0
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             return 0;
         }
         int sum = list.stream().mapToInt(EmotionDto::getValue).sum();
