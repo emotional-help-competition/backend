@@ -129,7 +129,7 @@ public class QuizResultServiceImpl implements QuizResultService {
         final Map<Emotion, List<EmotionDto>> result = new HashMap<>();
 
         // 2. Limit input emotions by 6 maximum
-        var emotionsList = inputEmotions.size() > 6 ? new ArrayList<>(inputEmotions.subList(0, LIST_SLICE_SIZE)) : inputEmotions;
+        var emotionsList = inputEmotions.size() > LIST_SLICE_SIZE ? new ArrayList<>(inputEmotions.subList(0, LIST_SLICE_SIZE)) : inputEmotions;
         emotionsList.forEach(emotionDto -> {
             // find emotion
             var emotion = emotionRepository.findById(emotionDto.getEmotionId()).orElse(new Emotion());
@@ -144,8 +144,8 @@ public class QuizResultServiceImpl implements QuizResultService {
         });
 
         // 3. Fill map with EMOTIONS which are not included in the input list
-        final int maxSize = LIST_SLICE_SIZE - result.values().size();
         final List<Emotion> emotions = emotionRepository.findAll();
+        final int maxSize = LIST_SLICE_SIZE - result.values().size();
         IntStream.range(0, maxSize).forEachOrdered(i -> emotions.stream()
                 .filter(emotionCategory -> !result.containsKey(emotionCategory))
                 .findFirst()
