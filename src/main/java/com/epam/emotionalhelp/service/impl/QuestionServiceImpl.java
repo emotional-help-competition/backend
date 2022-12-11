@@ -37,9 +37,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionResponseDto create(QuestionRequestDto questionRequestDto) {
+        var question = QuestionMapper.toEntity(questionRequestDto);
         var emotion = emotionRepository.findById(questionRequestDto.getEmotion().getId())
                 .orElseThrow(EMOTION_NOT_FOUND);
-        var question = QuestionMapper.toEntity(questionRequestDto);
         question.setEmotion(emotion);
         return QuestionMapper.toDto(questionRepository.save(question));
     }
