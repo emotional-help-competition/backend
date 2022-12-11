@@ -109,7 +109,7 @@ public class QuizResultServiceImpl implements QuizResultService {
                     double score = (double) partition.stream().mapToInt(Subcategory::getWeight).max().orElse(0) / PERCENTAGE_VALUE;
                     categoryList.add(new SubcategoryContainerDto(category, score));
                 }
-                quizResultEmotionDto.setSubCategories(categoryList);
+                quizResultEmotionDto.setSubCategories(null); // just to compile my code
             }
             //Add QuizResultEmotionDto to the List
             resultList.add(quizResultEmotionDto);

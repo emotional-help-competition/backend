@@ -1,11 +1,14 @@
 package com.epam.emotionalhelp.controller.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmotionalMapDto {
     private String category;
-    private List<SubcategoryContainerDto> subCategories;
+    private List<SubcategoryDto> subCategories;
 }
