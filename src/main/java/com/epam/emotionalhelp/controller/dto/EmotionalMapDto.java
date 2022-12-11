@@ -1,6 +1,5 @@
 package com.epam.emotionalhelp.controller.dto;
 
-
 import lombok.Data;
 
 import java.util.List;

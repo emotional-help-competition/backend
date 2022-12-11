@@ -16,6 +16,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
+    private static final String NOT_AUTHORIZED = "You are not authorized";
+    private static final String NO_ACCESS = "You have no access";
+    private static final String SERVER_ERROR = "Server error";
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
     public String resourceNotFound(ResourceNotFoundException e) {
@@ -26,7 +30,7 @@ public class ErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String methodArgumentsNotValid(MethodArgumentNotValidException e) {
         return e.getBindingResult().getFieldErrors().stream()
-                .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                 .collect(Collectors.joining("; "));
     }
 
@@ -34,26 +38,26 @@ public class ErrorHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public String constraintViolation(ConstraintViolationException e) {
         return e.getConstraintViolations().stream()
-                .map(cv -> cv.getPropertyPath() + ": " + cv.getMessage())
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
                 .collect(Collectors.joining("; "));
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(NotAuthorizedException.class)
     public String notAuthorized() {
-        return "You are not authorized";
+        return NOT_AUTHORIZED;
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(NoAccessException.class)
     public String noAccess() {
-        return "You have no access";
+        return NO_ACCESS;
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public String exception(Exception e) {
         log.error(e.getMessage(), e);
-        return "Server error";
+        return SERVER_ERROR;
     }
 }

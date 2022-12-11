@@ -2,7 +2,6 @@ package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.QuestionRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuestionResponseDto;
-import com.epam.emotionalhelp.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Question;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.repository.QuestionRepository;
@@ -14,17 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.function.Supplier;
+import static com.epam.emotionalhelp.service.util.ExceptionSupplier.*;
 
-
+/**
+ * The type Question service.
+ */
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
-    private static final Supplier<ResourceNotFoundException> QUESTION_NOT_FOUND =
-            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.QUESTION_NOT_FOUND);
-    private static final Supplier<ResourceNotFoundException> EMOTION_NOT_FOUND =
-            () -> new ResourceNotFoundException(ResourceNotFoundException.Type.EMOTION_NOT_FOUND);
-
     private final QuestionRepository questionRepository;
     private final EmotionRepository emotionRepository;
 
@@ -41,9 +37,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionResponseDto create(QuestionRequestDto questionRequestDto) {
+        var question = QuestionMapper.toEntity(questionRequestDto);
         var emotion = emotionRepository.findById(questionRequestDto.getEmotion().getId())
                 .orElseThrow(EMOTION_NOT_FOUND);
-        var question = QuestionMapper.toEntity(questionRequestDto);
         question.setEmotion(emotion);
         return QuestionMapper.toDto(questionRepository.save(question));
     }
