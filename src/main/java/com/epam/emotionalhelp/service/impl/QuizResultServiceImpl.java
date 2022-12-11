@@ -5,7 +5,6 @@ import com.epam.emotionalhelp.controller.dto.EmotionDto;
 import com.epam.emotionalhelp.controller.dto.EmotionalMapDto;
 import com.epam.emotionalhelp.controller.dto.SubcategoryContainerDto;
 import com.epam.emotionalhelp.model.Emotion;
-import com.epam.emotionalhelp.model.EmotionCategory;
 import com.epam.emotionalhelp.model.QuizAttempt;
 import com.epam.emotionalhelp.model.QuizResult;
 import com.epam.emotionalhelp.model.Subcategory;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -126,38 +124,39 @@ public class QuizResultServiceImpl implements QuizResultService {
         return data.stream().map(subcategoryMapper()).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private Map<EmotionCategory, List<EmotionDto>> filterByEmotions(final List<EmotionDto> inputEmotions) {
+    private Map<Emotion, List<EmotionDto>> filterByEmotions(final List<EmotionDto> inputEmotions) {
         // 1. Fill map with EMOTIONS and its SUBCATEGORIES
-        final Map<EmotionCategory, List<EmotionDto>> result = new HashMap<>();
+        final Map<Emotion, List<EmotionDto>> result = new HashMap<>();
 
         // 2. Limit input emotions by 6 maximum
-        var emotions = new ArrayList<>(inputEmotions.subList(0, LIST_SLICE_SIZE));
-        emotions.forEach(emotionDto -> {
-            // find emotion and extract description
+        var emotionsList = inputEmotions.size() > 6 ? new ArrayList<>(inputEmotions.subList(0, LIST_SLICE_SIZE)) : inputEmotions;
+        emotionsList.forEach(emotionDto -> {
+            // find emotion
             var emotion = emotionRepository.findById(emotionDto.getEmotionId()).orElse(new Emotion());
-            var description = emotion.getDescription().toUpperCase();
-
             // check if map already contains EMOTION
-            var category = EmotionCategory.valueOf(description);
-            if (result.containsKey(category)) {
-                result.get(category).add(emotionDto);
+            if (result.containsKey(emotion)) {
+                result.get(emotion).add(emotionDto);
             } else {
                 var data = new ArrayList<EmotionDto>();
                 data.add(emotionDto);
-                result.put(category, data);
+                result.put(emotion, data);
             }
         });
 
         // 3. Fill map with EMOTIONS which are not included in the input list
         final int maxSize = LIST_SLICE_SIZE - result.values().size();
-        IntStream.range(0, maxSize).mapToObj(i -> result).forEach(QuizResultUtil::fillMapByEmptyEmotions);
+        final List<Emotion> emotions = emotionRepository.findAll();
+        IntStream.range(0, maxSize).forEachOrdered(i -> emotions.stream()
+                .filter(emotionCategory -> !result.containsKey(emotionCategory))
+                .findFirst()
+                .ifPresent(emotionCategory -> result.put(emotionCategory, new ArrayList<>())));
         return result;
     }
 
-    private Map<Emotion, Integer> calculateEmotionPercentage(Map<EmotionCategory, List<EmotionDto>> data) {
+    private Map<Emotion, Integer> calculateEmotionPercentage(Map<Emotion, List<EmotionDto>> data) {
         final Map<Emotion, Integer> result = new HashMap<>();
         data.forEach((category, emotions) -> {
-            var emotion = emotionRepository.findEmotionByDescription(category.getName());
+            var emotion = emotionRepository.findEmotionByDescription(category.getDescription());
             var percentage = emotions.isEmpty() ? 0 : calculateEmotionsPercentage(emotions);
             result.put(emotion, percentage);
         });
@@ -166,12 +165,6 @@ public class QuizResultServiceImpl implements QuizResultService {
 
     @UtilityClass
     static final class QuizResultUtil {
-        public static void fillMapByEmptyEmotions(Map<EmotionCategory, List<EmotionDto>> emotionsMap) {
-            Arrays.stream(EmotionCategory.values())
-                    .filter(category -> !emotionsMap.containsKey(category))
-                    .findFirst()
-                    .ifPresent(category -> emotionsMap.put(category, new ArrayList<>()));
-        }
 
         public static int calculateEmotionsPercentage(List<EmotionDto> emotions) {
             final int sum = emotions.stream().mapToInt(EmotionDto::getValue).sum();
