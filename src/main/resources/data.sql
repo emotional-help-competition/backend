@@ -117,7 +117,6 @@ VALUES ('You used to be angry', 1),
        ('You felt at some point insignificant', 9);
 
 
-
 INSERT INTO appointment_type (description)
 VALUES ('general training'),
        ('psychologist'),
@@ -128,39 +127,54 @@ VALUES ('general training'),
 
 INSERT INTO appointment (appointment_type_id, description, icon, link)
 VALUES (1,
-        'This is general training. It is suitable for everyone',
+        'This is general anger control training. It is suitable for everyone',
         'https://cdn-icons-png.flaticon.com/512/1357/1357051.png',
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+        'https://www.youtube.com/watch?v=BsVq5R_F6RA'),
        (2,
-        'This is appointment with real psychologist. Doctor is going to find different ways to your personality',
+        'This is appointment with real psychologist for guess your fear. Doctor is going to find different ways to your personality',
         'https://cdn-icons-png.flaticon.com/512/2912/2912992.png',
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+        'https://www.youtube.com/watch?v=xrWvPo-KaVs'),
        (3,
-        'This is online webinar. Internet is very good from sadness',
+        'This is online webinar counter sadness. Internet is very good from sadness',
         'https://cdn-icons-png.flaticon.com/512/2997/2997495.png',
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+        'https://www.youtube.com/watch?v=Bg6LEYtVAsk'),
        (4,
-        'This is an obstacle to solve by you own.Train hard',
+        'This is an obstacle to solve by you own. Train hard. Your love has 6 ways',
         'https://cdn-icons-png.flaticon.com/512/5377/5377537.png',
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+        'https://www.youtube.com/watch?v=a0j7KPwavAg'),
        (5,
-        'This is a book lesson. The more you read, the most you realize)',
+        'This is a book lesson with surprise topics. The more you read, the most you realize)',
         'https://cdn-icons-png.flaticon.com/512/2702/2702134.png',
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+        'https://www.youtube.com/watch?v=E-nAGNhI7uk'),
+       (2,
+        'This is appointment with real psychologist to discuss joy. Everyone can be a child',
+        'https://cdn-icons-png.flaticon.com/512/2912/2912992.png',
+        'https://www.youtube.com/watch?v=A_u2WFTfbcg'),
+       (3,
+        'This is online webinar how to be accepted. Internet is very good from sadness',
+        'https://cdn-icons-png.flaticon.com/512/2997/2997495.png',
+        'https://www.youtube.com/watch?v=dm2rdO7hAfI'),
+       (4,
+        'This is an obstacle to solve by you own. Do not be afraid to have a fear',
+        'https://cdn-icons-png.flaticon.com/512/5377/5377537.png',
+        'https://www.youtube.com/watch?v=EGM_Pl8j_QU'),
+       (5,
+        'This is a book lesson. But book is not scary)',
+        'https://cdn-icons-png.flaticon.com/512/2702/2702134.png',
+        'https://www.youtube.com/watch?v=mCstEs052KA');
 
 
 INSERT INTO recommendation (emotion_id, appointment_id, floor, ceil)
-VALUES (6, 1, 0, 100),
-       (6, 3, 0, 40),
-       (1, 2, 0, 20),
-       (2, 3, 0, 20),
-       (3, 3, 0, 20),
-       (4, 3, 0, 20),
-       (5, 2, 0, 50),
-       (6, 2, 0, 100),
-       (7, 1, 0, 100),
-       (8, 1, 0, 100),
-       (9, 2, 0, 100);
+VALUES (6, 6, 0, 10),
+       (1, 1, 60, 100),
+       (2, 2, 40, 100),
+       (3, 3, 40, 100),
+       (4, 4, 0, 30),
+       (5, 5, 0, 50),
+       (6, 6, 90, 100),
+       (7, 7, 0, 20),
+       (8, 8, 70, 100),
+       (9, 9, 70, 100);
 
 
 INSERT INTO quiz(name, description, created_at)
@@ -281,7 +295,6 @@ VALUES (1, 'rabies', 5),
        (1, 'vulnerability', 95),
        (1, 'fury', 100),
 
-
        (2, 'doubt', 5),
        (2, 'fright', 15),
        (2, 'numbness', 20),
@@ -295,7 +308,6 @@ VALUES (1, 'rabies', 5),
        (2, 'confusion', 95),
        (2, 'despair', 100),
 
-
        (3, 'yearning', 15),
        (3, 'sorrow', 20),
        (3, 'laziness', 25),
@@ -307,7 +319,6 @@ VALUES (1, 'rabies', 5),
        (3, 'boredom', 85),
        (3, 'hopelessness', 95),
        (3, 'disappointment', 100),
-
 
        (4, 'identity', 5),
        (4, 'sympathy', 15),
@@ -321,7 +332,6 @@ VALUES (1, 'rabies', 5),
        (4, 'kindness', 95),
        (4, 'bliss', 100),
 
-
        (5, 'stunned', 5),
        (5, 'awe-struck', 20),
        (5, 'perplexed', 25),
@@ -332,7 +342,6 @@ VALUES (1, 'rabies', 5),
        (5, 'speechless', 85),
        (5, 'confused', 95),
        (5, 'amazed', 100),
-
 
        (6, 'eager', 15),
        (6, 'amused', 20),
@@ -345,7 +354,6 @@ VALUES (1, 'rabies', 5),
        (6, 'pleased', 85),
        (6, 'happy', 95),
        (6, 'blisful', 100),
-
 
        (7, 'brave', 35),
        (7, 'proud', 45),
@@ -360,7 +368,6 @@ VALUES (1, 'rabies', 5),
        (8, 'stressed', 70),
        (8, 'overwhelmed', 95),
        (8, 'guilty', 100),
-
 
        (9, 'rejected', 15),
        (9, 'submissive', 25),
