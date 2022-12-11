@@ -49,10 +49,10 @@ public class QuizController {
     private final QuizResultService quizResultService;
 
     /**
-     * Find all page.
+     * Find all quizzes.
      *
      * @param pageable the pageable
-     * @return the page
+     * @return quizzes
      */
     @Operation(summary = "Get all quizzes")
     @ApiResponses(value = {
@@ -68,10 +68,10 @@ public class QuizController {
     }
 
     /**
-     * Find by id quiz response dto.
+     * Find quiz by id.
      *
      * @param id the id
-     * @return the quiz response dto
+     * @return quiz
      */
     @Operation(summary = "Get the quiz")
     @ApiResponses(value = {
@@ -87,10 +87,10 @@ public class QuizController {
     }
 
     /**
-     * Create quiz response dto.
+     * Create quiz.
      *
      * @param quizRequestDto the quiz request dto
-     * @return the quiz response dto
+     * @return quiz
      */
     @Operation(summary = "Create the quiz")
     @ApiResponses(value = {
@@ -107,7 +107,7 @@ public class QuizController {
     }
 
     /**
-     * Calculate result attempt dto.
+     * Calculate results.
      *
      * @param id       the id
      * @param emotions the emotions
@@ -129,11 +129,11 @@ public class QuizController {
     }
 
     /**
-     * Update quiz response dto.
+     * Update quiz by id.
      *
      * @param id             the id
      * @param quizRequestDto the quiz request dto
-     * @return the quiz response dto
+     * @return quiz
      */
     @Operation(summary = "Update the quiz")
     @ApiResponses(value = {
@@ -149,7 +149,7 @@ public class QuizController {
     }
 
     /**
-     * Delete.
+     * Delete quiz.
      *
      * @param id the id
      */

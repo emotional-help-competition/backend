@@ -40,10 +40,10 @@ public class EmotionController {
     private final EmotionService emotionService;
 
     /**
-     * Find all page.
+     * Find all emotions.
      *
      * @param pageable the pageable
-     * @return the page
+     * @return emotions
      */
     @Operation(summary = "Get all emotions")
     @ApiResponses(value = {
@@ -59,10 +59,10 @@ public class EmotionController {
     }
 
     /**
-     * Find by id emotion response dto.
+     * Find emotion by id.
      *
      * @param id the id
-     * @return the emotion response dto
+     * @return emotion
      */
     @Operation(summary = "Get the emotion")
     @ApiResponses(value = {
@@ -80,7 +80,7 @@ public class EmotionController {
     }
 
     /**
-     * Update emotion response dto.
+     * Update emotion by id.
      *
      * @param id                the id
      * @param emotionRequestDto the emotion request dto

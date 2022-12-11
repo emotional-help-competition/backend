@@ -45,10 +45,10 @@ public class QuestionController {
     private final QuestionService questionService;
 
     /**
-     * Find all page.
+     * Find all questions.
      *
      * @param pageable the pageable
-     * @return the page
+     * @return questions
      */
     @Operation(summary = "Get list of questions")
     @ApiResponses(value = {
@@ -61,10 +61,10 @@ public class QuestionController {
     }
 
     /**
-     * Find by id question response dto.
+     * Find question by id.
      *
      * @param id the id
-     * @return the question response dto
+     * @return question
      */
     @Operation(summary = "Get question by id")
     @ApiResponses(value = {
@@ -79,10 +79,10 @@ public class QuestionController {
     }
 
     /**
-     * Create question response dto.
+     * Create question.
      *
      * @param questionRequestDto the question request dto
-     * @return the question response dto
+     * @return question
      */
     @Operation(summary = "Create the question")
     @ApiResponses(value = {
@@ -98,11 +98,11 @@ public class QuestionController {
     }
 
     /**
-     * Update question response dto.
+     * Update question.
      *
      * @param id                 the id
      * @param questionRequestDto the question request dto
-     * @return the question response dto
+     * @return question
      */
     @Operation(summary = "Update the question")
     @ApiResponses(value = {
@@ -119,7 +119,7 @@ public class QuestionController {
     }
 
     /**
-     * Delete.
+     * Delete question.
      *
      * @param id the id
      */

@@ -36,7 +36,7 @@ public class RecommendationController {
      * Find all recommendations by attempt id.
      *
      * @param attemptId the attempt id
-     * @return the list
+     * @return recommendations
      */
     @Operation(summary = "Get recommendations for specified attempt id")
     @ApiResponses(value = {

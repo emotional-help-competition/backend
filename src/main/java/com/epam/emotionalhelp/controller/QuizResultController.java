@@ -41,6 +41,12 @@ public class QuizResultController {
         return quizResultService.findAll(pageable);
     }
 
+    /**
+     * Find result by attempt id.
+     *
+     * @param id the attempt id
+     * @return list of emotional map dto
+     */
     @Operation(summary = "Get results for specified attempt id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of results",
