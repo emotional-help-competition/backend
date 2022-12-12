@@ -32,7 +32,6 @@ import javax.validation.constraints.Min;
 
 import static com.epam.emotionalhelp.controller.util.EndpointName.QUESTIONS;
 
-
 /**
  * The type Question controller.
  */
