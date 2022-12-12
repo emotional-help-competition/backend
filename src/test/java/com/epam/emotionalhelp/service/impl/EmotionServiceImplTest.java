@@ -87,8 +87,8 @@ class EmotionServiceImplTest {
     void create_withCorrectArguments_returnsCreatedEmotion() {
         var emotion = EmotionProvider.createEmotion();
         when(emotionRepository.save(any())).thenReturn(emotion);
-        var emotionRequestDto = new EmotionRequestDto();
-        emotionRequestDto.setDescription("emotion");
+
+        var emotionRequestDto = EmotionProvider.createEmotionDTO();
         var emotionResponseDto = emotionService.create(emotionRequestDto);
         var actualEmotionDescription = emotion.getDescription();
 
