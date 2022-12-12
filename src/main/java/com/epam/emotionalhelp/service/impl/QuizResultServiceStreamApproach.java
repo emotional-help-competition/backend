@@ -40,6 +40,7 @@ import static com.epam.emotionalhelp.service.util.ExceptionSupplier.*;
 @Service
 @RequiredArgsConstructor
 public class QuizResultServiceStreamApproach implements QuizResultService {
+
     private static final int HEXAGONS_QUANTITY = 4;
     private static final int HEXAGON_CAPACITY = 3;
     private static final int PERCENT_COEFFICIENT = 100;
