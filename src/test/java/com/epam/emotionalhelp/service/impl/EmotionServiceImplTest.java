@@ -147,8 +147,10 @@ class EmotionServiceImplTest {
     @UtilityClass
     private static final class EmotionProvider {
 
+        private static final String EMOTION_VALUE = "emotion";
+        
         Emotion createEmotion() {
-            return new Emotion("emotion");
+            return new Emotion(EMOTION_VALUE);
         }
 
         Emotion createAnotherEmotion() {
