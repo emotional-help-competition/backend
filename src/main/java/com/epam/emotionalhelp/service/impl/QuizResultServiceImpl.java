@@ -3,7 +3,7 @@ package com.epam.emotionalhelp.service.impl;
 import com.epam.emotionalhelp.controller.dto.AttemptDto;
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
 import com.epam.emotionalhelp.controller.dto.EmotionalMapDto;
-import com.epam.emotionalhelp.controller.dto.SubcategoryContainerDto;
+import com.epam.emotionalhelp.controller.dto.SubcategoryDto;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.model.QuizAttempt;
 import com.epam.emotionalhelp.model.QuizResult;
@@ -33,13 +33,19 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.epam.emotionalhelp.service.impl.QuizResultServiceImpl.QuizResultUtil.*;
+import static com.epam.emotionalhelp.service.impl.QuizResultServiceImpl.QuizResultUtil.calculateEmotionsPercentage;
+import static com.epam.emotionalhelp.service.impl.QuizResultServiceImpl.QuizResultUtil.subcategoryMapper;
+
 
 /**
  * The type Quiz result service.
+ *
+ * @see QuizResultServiceStreamApproach
+ * @deprecated to be removed in future releases
  */
 @Service
 @RequiredArgsConstructor
+@Deprecated(since = "1.0", forRemoval = true)
 public class QuizResultServiceImpl implements QuizResultService {
 
     private static final int MAX_SCORE_VALUE = 5;
@@ -112,7 +118,7 @@ public class QuizResultServiceImpl implements QuizResultService {
         return resultList;
     }
 
-    private List<SubcategoryContainerDto> initSubcategoryList(QuizResult quizResult, Long emotionId) {
+    private List<SubcategoryDto> initSubcategoryList(QuizResult quizResult, Long emotionId) {
         final int percentage = (int) (((double) quizResult.getScore() / MAX_SCORE_VALUE) * PERCENTAGE_VALUE);
         var allSubcategories = subcategoryRepository.findAllSubcategories(percentage, emotionId);
         var subcategories = allSubcategories
@@ -171,8 +177,8 @@ public class QuizResultServiceImpl implements QuizResultService {
             return sum / emotions.size();
         }
 
-        public static Function<List<Subcategory>, SubcategoryContainerDto> subcategoryMapper() {
-            return subcategory -> new SubcategoryContainerDto(
+        public static Function<List<Subcategory>, SubcategoryDto> subcategoryMapper() {
+            return subcategory -> new SubcategoryDto(
                     extractCategories(subcategory),
                     extractScore(subcategory)
             );

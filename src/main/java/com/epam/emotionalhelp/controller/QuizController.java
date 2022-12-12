@@ -113,7 +113,7 @@ public class QuizController {
      * @param emotions the emotions
      * @return the attempt dto
      */
-    @Operation(summary = "Get quiz results")
+    @Operation(summary = "Save quiz results")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns attempt id for these results",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -123,8 +123,7 @@ public class QuizController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}")
-    public AttemptDto calculateResult(@PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
-
+    public AttemptDto calculateResult(@Min(1) @PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
         return quizResultService.calculate(id, emotions);
     }
 

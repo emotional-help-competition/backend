@@ -5,13 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Collection;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class EmotionalMapDto {
-    private String category;
-    private List<SubcategoryDto> subCategories;
+@NoArgsConstructor
+public class SubcategoryDto {
+    private Collection<String> emotions;
+    private Double score;
 }
