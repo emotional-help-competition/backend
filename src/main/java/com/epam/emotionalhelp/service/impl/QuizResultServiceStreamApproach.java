@@ -32,6 +32,10 @@ import java.util.stream.Collectors;
 
 import static com.epam.emotionalhelp.service.util.ExceptionSupplier.*;
 
+
+/**
+ * The type Quiz result service.
+ */
 @Primary
 @Service
 @RequiredArgsConstructor
