@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 
 import static com.epam.emotionalhelp.service.util.ExceptionSupplier.*;
 
-
 /**
  * The type Quiz result service.
  */
@@ -54,12 +53,19 @@ public class QuizResultServiceStreamApproach implements QuizResultService {
 
     @Override
     public List<EmotionalMapDto> findQuizResultsByAttemptId(Long attemptId) {
-        return quizResultRepository.findAllByAttemptId(attemptId).stream()
+        var emotionalMap = quizResultRepository.findAllByAttemptId(attemptId).stream()
                 .map(RecommendationMapper::toEmotionDto)
                 .sorted(Comparator.comparing(EmotionDto::getValue).reversed())
                 .limit(MAX_BIG_EMOTIONS_QUANTITY)
                 .map(this::prepareEmotionalMapDto)
                 .collect(Collectors.toList());
+        while (emotionalMap.size() < MAX_BIG_EMOTIONS_QUANTITY) {
+            emotionalMap.add(EmotionalMapDto.builder()
+                    .category("emotion")
+                    .subCategories(List.of())
+                    .build());
+        }
+        return emotionalMap;
     }
 
     private EmotionalMapDto prepareEmotionalMapDto(EmotionDto emotionDto) {
