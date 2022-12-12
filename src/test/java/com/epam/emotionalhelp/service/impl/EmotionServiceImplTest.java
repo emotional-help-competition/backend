@@ -157,7 +157,18 @@ class EmotionServiceImplTest {
             return new Emotion("emotion2");
         }
 
+        EmotionRequestDto createEmotionDTO() {
+            var emotionDto = new EmotionRequestDto();
+            emotionDto.setDescription(EMOTION_VALUE);
+            return emotionDto;
+        }
 
+        EmotionRequestDto createAnotherEmotionDTO() {
+            var emotionDto = new EmotionRequestDto();
+            emotionDto.setDescription("emotion1");
+            return emotionDto;
+        }
+        
         List<Emotion> generateEmotionList() {
             List<Emotion> emotions = new ArrayList<>();
             emotions.add(new Emotion("emotion"));
