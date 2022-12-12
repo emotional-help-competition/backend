@@ -37,10 +37,13 @@ import static com.epam.emotionalhelp.service.impl.QuizResultServiceImpl.QuizResu
 
 /**
  * The type Quiz result service.
+ *
+ * @see QuizResultServiceStreamApproach
+ * @deprecated to be removed in future releases
  */
 @Service
 @RequiredArgsConstructor
-@Deprecated
+@Deprecated(since = "1.0", forRemoval = true)
 public class QuizResultServiceImpl implements QuizResultService {
 
     private static final int MAX_SCORE_VALUE = 5;
