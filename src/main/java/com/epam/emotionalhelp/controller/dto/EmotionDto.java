@@ -1,13 +1,21 @@
 package com.epam.emotionalhelp.controller.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotNull;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class EmotionDto {
     @NotNull
-    Long emotionId;
+    private Long emotionId;
     @NotNull
-    Integer value;
+    @Range(min = 0, max = 5)
+    private Integer value;
 }

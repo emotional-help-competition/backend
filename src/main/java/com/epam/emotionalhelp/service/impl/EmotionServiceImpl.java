@@ -2,8 +2,6 @@ package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
 import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
-import com.epam.emotionalhelp.controller.response.ResponseMessage;
-import com.epam.emotionalhelp.exceptionhandler.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.service.EmotionService;
@@ -14,6 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.epam.emotionalhelp.service.util.ExceptionSupplier.EMOTION_NOT_FOUND;
+
+/**
+ * The basics Emotion service.
+ */
 @Service
 @RequiredArgsConstructor
 public class EmotionServiceImpl implements EmotionService {
@@ -34,7 +37,6 @@ public class EmotionServiceImpl implements EmotionService {
         return EmotionMapper.toDto(emotionRepository.save(EmotionMapper.toEntity(emotionRequestDto)));
     }
 
-
     @Transactional
     @Override
     public EmotionResponseDto update(Long id, EmotionRequestDto emotionRequestDto) {
@@ -54,6 +56,6 @@ public class EmotionServiceImpl implements EmotionService {
     }
 
     private Emotion findEmotionById(Long id) {
-        return emotionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
+        return emotionRepository.findById(id).orElseThrow(EMOTION_NOT_FOUND);
     }
 }

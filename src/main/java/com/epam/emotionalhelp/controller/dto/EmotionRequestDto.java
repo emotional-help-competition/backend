@@ -1,11 +1,15 @@
 package com.epam.emotionalhelp.controller.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmotionRequestDto {
     @NotBlank
-    String description;
+    private String description;
 }

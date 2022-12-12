@@ -2,17 +2,17 @@ package com.epam.emotionalhelp.controller.dto;
 
 import com.epam.emotionalhelp.model.Question;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Set;
 
-@Value
+@Data
 @Builder
 public class QuizResponseDto {
-    Long id;
-    String name;
-    String description;
-    ZonedDateTime createDate;
-    Set<Question> questions;
+    private final Long id;
+    private final String name;
+    private final String description;
+    private final LocalDateTime createDate;
+    private final Set<Question> questions;
 }
