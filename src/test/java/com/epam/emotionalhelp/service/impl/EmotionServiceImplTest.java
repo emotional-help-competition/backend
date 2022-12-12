@@ -121,8 +121,8 @@ class EmotionServiceImplTest {
     @Test
     void update_withIncorrectEmotionId_throwsResourceNotFoundException() {
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.empty());
-        EmotionRequestDto emotionRequestDto = new EmotionRequestDto();
-        emotionRequestDto.setDescription("emotion1");
+        var emotionRequestDto = EmotionProvider.createAnotherEmotionDTO();
+        
         assertThatThrownBy(() -> emotionService.update(1L, emotionRequestDto))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
