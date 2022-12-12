@@ -12,6 +12,6 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SubcategoryDto {
-    private Collection<EmotionRequestDto> emotions;
+    private Collection<String> emotions;
     private Double score;
 }

@@ -1,36 +1,53 @@
 package com.epam.emotionalhelp.service.impl;
 
+import com.epam.emotionalhelp.controller.dto.AttemptDto;
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
-import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
 import com.epam.emotionalhelp.controller.dto.EmotionalMapDto;
 import com.epam.emotionalhelp.controller.dto.SubcategoryDto;
+import com.epam.emotionalhelp.model.Quiz;
+import com.epam.emotionalhelp.model.QuizAttempt;
+import com.epam.emotionalhelp.model.QuizResult;
 import com.epam.emotionalhelp.model.Subcategory;
 import com.epam.emotionalhelp.repository.EmotionRepository;
+import com.epam.emotionalhelp.repository.QuizAttemptRepository;
+import com.epam.emotionalhelp.repository.QuizRepository;
 import com.epam.emotionalhelp.repository.QuizResultRepository;
 import com.epam.emotionalhelp.repository.SubcategoryRepository;
+import com.epam.emotionalhelp.service.QuizResultService;
 import com.epam.emotionalhelp.service.mapper.RecommendationMapper;
-import com.epam.emotionalhelp.service.util.ExceptionSupplier;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.epam.emotionalhelp.service.util.ExceptionSupplier.*;
+
+@Primary
 @Service
 @RequiredArgsConstructor
-public class QuizResultServiceStreamApproach {
+public class QuizResultServiceStreamApproach implements QuizResultService {
     private static final int HEXAGONS_QUANTITY = 4;
     private static final int HEXAGON_CAPACITY = 3;
     private static final int PERCENT_COEFFICIENT = 100;
+    private static final int SCORE_COEFFICIENT = 20;
 
     private final QuizResultRepository quizResultRepository;
     private final EmotionRepository emotionRepository;
     private final SubcategoryRepository subcategoryRepository;
+    private final QuizAttemptRepository quizAttemptRepository;
+    private final QuizRepository quizRepository;
 
-    public List<EmotionalMapDto> getEmotionMap(Long attemptId) {
+    @Override
+    public List<EmotionalMapDto> findQuizResultsByAttemptId(Long attemptId) {
         return quizResultRepository.findAllByAttemptId(attemptId).stream()
                 .map(RecommendationMapper::toEmotionDto)
                 .map(this::prepareEmotionalMapDto)
@@ -53,8 +70,7 @@ public class QuizResultServiceStreamApproach {
 
     /**
      * We expect a list of subcategory with size <= hexagonsNumber * hexagonCapacity;
-     * Example:
-     * 4 hexagon * 3 category;
+     * Example: 4 hexagon * 3 category;
      * 0 cat - 0 hex;
      * 1..3 cat - 1 hex;
      * 4..6 cat - 2 hex;
@@ -84,10 +100,9 @@ public class QuizResultServiceStreamApproach {
                 .build();
     }
 
-    private List<EmotionRequestDto> getEmotions(List<Subcategory> subcategoryList) {
+    private List<String> getEmotions(List<Subcategory> subcategoryList) {
         return subcategoryList.stream()
                 .map(Subcategory::getDescription)
-                .map(EmotionRequestDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -100,16 +115,35 @@ public class QuizResultServiceStreamApproach {
 
     private String getEmotion(EmotionDto emotionDto) {
         return emotionRepository.findById(emotionDto.getEmotionId())
-                .orElseThrow(ExceptionSupplier.EMOTION_NOT_FOUND)
+                .orElseThrow(EMOTION_NOT_FOUND)
                 .getDescription();
     }
 
-    @Bean
-    CommandLineRunner commandLineRunner(QuizResultServiceStreamApproach serv) {
-        return x -> {
-            var emotionMap = serv.getEmotionMap(1L);
+    @Override
+    public Page<QuizResult> findAll(Pageable pageable) {
+        return quizResultRepository.findAll(pageable);
+    }
 
-            emotionMap.forEach(System.out::println);
-        };
+    @Override
+    @Transactional
+    public AttemptDto calculate(Long quizId, List<EmotionDto> emotions) {
+        QuizAttempt attempt = quizAttemptRepository.save(QuizAttempt.builder()
+                .createDate(LocalDateTime.now())
+                .build());
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(QUIZ_NOT_FOUND);
+        getAverageResultValues(emotions).forEach((emotionId, value) -> quizResultRepository.save(QuizResult.builder()
+                .quiz(quiz)
+                .attempt(attempt)
+                .emotion(emotionRepository.findById(emotionId).orElseThrow(EMOTION_NOT_FOUND))
+                .score(value.intValue())
+                .build()));
+        return new AttemptDto(attempt.getId());
+    }
+
+    private Map<Long, Double> getAverageResultValues(List<EmotionDto> emotions) {
+        return emotions.stream()
+                .collect(Collectors.groupingBy(EmotionDto::getEmotionId, LinkedHashMap::new,
+                        Collectors.averagingInt(emotionDto -> emotionDto.getValue() * SCORE_COEFFICIENT)));
     }
 }

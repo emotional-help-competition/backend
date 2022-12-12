@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Deprecated
 public class QuizResultServiceImpl implements QuizResultService {
     private static final int MAX_SCORE_VALUE = 5;
     private static final int PERCENTAGE_VALUE = 100;
