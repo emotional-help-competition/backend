@@ -4,7 +4,6 @@ import com.epam.emotionalhelp.controller.dto.AttemptDto;
 import com.epam.emotionalhelp.controller.dto.EmotionDto;
 import com.epam.emotionalhelp.controller.dto.EmotionalMapDto;
 import com.epam.emotionalhelp.controller.dto.SubcategoryDto;
-import com.epam.emotionalhelp.model.Quiz;
 import com.epam.emotionalhelp.model.QuizAttempt;
 import com.epam.emotionalhelp.model.QuizResult;
 import com.epam.emotionalhelp.model.Subcategory;
