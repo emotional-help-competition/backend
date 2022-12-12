@@ -136,10 +136,10 @@ public class QuizResultServiceStreamApproach implements QuizResultService {
     @Override
     @Transactional
     public AttemptDto calculate(Long quizId, List<EmotionDto> emotions) {
-        QuizAttempt attempt = quizAttemptRepository.save(QuizAttempt.builder()
+        var attempt = quizAttemptRepository.save(QuizAttempt.builder()
                 .createDate(LocalDateTime.now())
                 .build());
-        Quiz quiz = quizRepository.findById(quizId)
+        var quiz = quizRepository.findById(quizId)
                 .orElseThrow(QUIZ_NOT_FOUND);
         getAverageResultValues(emotions).forEach((emotionId, value) -> quizResultRepository.save(QuizResult.builder()
                 .quiz(quiz)
