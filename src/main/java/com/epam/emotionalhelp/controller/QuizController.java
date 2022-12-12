@@ -123,8 +123,7 @@ public class QuizController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}")
-    public AttemptDto calculateResult(@PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
-
+    public AttemptDto calculateResult(@Min(1) @PathVariable Long id, @RequestBody @Valid List<EmotionDto> emotions) {
         return quizResultService.calculate(id, emotions);
     }
 
