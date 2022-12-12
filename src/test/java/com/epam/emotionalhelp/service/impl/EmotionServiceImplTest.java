@@ -107,7 +107,7 @@ class EmotionServiceImplTest {
         var expected = EmotionProvider.createAnotherEmotion();
         when(emotionRepository.save(any())).thenReturn(expected);
 
-        var emotionRequestDto = EmotionProvider.createAnotherEmotion();
+        var emotionRequestDto = EmotionProvider.createEmotionDTO();
 
         var emotionResponseDto = emotionService.update(1L, emotionRequestDto);
         var actualEmotionDescription = expected.getDescription();
