@@ -16,7 +16,6 @@ public class EmotionDto {
     @NotNull
     private Long emotionId;
     @NotNull
-    @Min(0)
-    @Max(5)
+    @Range(min = 0, max = 5)
     private Integer value;
 }
