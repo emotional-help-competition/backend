@@ -2,8 +2,6 @@ package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.QuizRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuizResponseDto;
-import com.epam.emotionalhelp.controller.response.ResponseMessage;
-import com.epam.emotionalhelp.exceptionhandler.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Quiz;
 import com.epam.emotionalhelp.repository.QuestionRepository;
 import com.epam.emotionalhelp.repository.QuizRepository;
@@ -17,6 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
+import static com.epam.emotionalhelp.service.util.ExceptionSupplier.*;
+
+/**
+ * The type Quiz service.
+ */
 @Service
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
@@ -37,10 +40,11 @@ public class QuizServiceImpl implements QuizService {
     public QuizResponseDto create(QuizRequestDto quizRequestDto) {
         var questions = quizRequestDto.getQuestions().stream()
                 .map(question -> questionRepository.findById(question.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND))).collect(Collectors.toSet());
+                        .orElseThrow(QUESTION_NOT_FOUND)).collect(Collectors.toSet());
         quizRequestDto.setQuestions(questions);
         return QuizMapper.toDto(quizRepository.save(QuizMapper.toEntity(quizRequestDto)));
     }
+
     @Transactional
     @Override
     public QuizResponseDto update(Long id, QuizRequestDto quizRequestDto) {
@@ -56,13 +60,15 @@ public class QuizServiceImpl implements QuizService {
         }
         return QuizMapper.toDto(quizRepository.save(quiz));
     }
+
     @Transactional
     @Override
     public void deleteById(Long id) {
         var quiz = findQuizById(id);
         quizRepository.delete(quiz);
     }
+
     private Quiz findQuizById(Long id){
-        return quizRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
+        return quizRepository.findById(id).orElseThrow(QUIZ_NOT_FOUND);
     }
 }

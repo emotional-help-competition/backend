@@ -28,6 +28,7 @@
         <jaxb.version>2.3.1</jaxb.version>
         <swagger.version>1.6.11</swagger.version>
         <validation.version>3.0.0</validation.version>
+        <listutils.version>4.4</listutils.version>
     </properties>
 
     <dependencies>
@@ -109,6 +110,11 @@
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${listutils.version}</version>
         </dependency>
     </dependencies>
 

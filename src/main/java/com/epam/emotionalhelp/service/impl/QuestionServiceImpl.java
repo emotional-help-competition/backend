@@ -2,8 +2,6 @@ package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.QuestionRequestDto;
 import com.epam.emotionalhelp.controller.dto.QuestionResponseDto;
-import com.epam.emotionalhelp.controller.response.ResponseMessage;
-import com.epam.emotionalhelp.exceptionhandler.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Question;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.repository.QuestionRepository;
@@ -15,11 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.epam.emotionalhelp.service.util.ExceptionSupplier.*;
 
+/**
+ * The type Question service.
+ */
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
-
     private final QuestionRepository questionRepository;
     private final EmotionRepository emotionRepository;
 
@@ -36,8 +37,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionResponseDto create(QuestionRequestDto questionRequestDto) {
-        var emotion = emotionRepository.findById(questionRequestDto.getEmotion().getId()).orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
         var question = QuestionMapper.toEntity(questionRequestDto);
+        var emotion = emotionRepository.findById(questionRequestDto.getEmotion().getId())
+                .orElseThrow(EMOTION_NOT_FOUND);
         question.setEmotion(emotion);
         return QuestionMapper.toDto(questionRepository.save(question));
     }
@@ -64,7 +66,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private Question findQuestionById(Long id){
-        return questionRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
+        return questionRepository.findById(id).orElseThrow(QUESTION_NOT_FOUND);
     }
 }
 
