@@ -1,17 +1,16 @@
 package com.epam.emotionalhelp.service.impl;
 
 import com.epam.emotionalhelp.controller.dto.EmotionRequestDto;
-import com.epam.emotionalhelp.controller.dto.EmotionResponseDto;
 import com.epam.emotionalhelp.exception.ResourceNotFoundException;
 import com.epam.emotionalhelp.model.Emotion;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.service.EmotionService;
+import lombok.experimental.UtilityClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
@@ -22,6 +21,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.times;
@@ -30,7 +30,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EmotionServiceImplTest {
+class EmotionServiceImplTest {
+
     @Mock
     private EmotionRepository emotionRepository;
 
@@ -44,65 +45,84 @@ public class EmotionServiceImplTest {
 
     @Test
     void findAll_returnsPageEmotionResponseDto() {
-        List<Emotion> emotions = generateEmotionList();
-        PageRequest pageable = PageRequest.of(0, 2);
-        Page<Emotion> emotionPage = new PageImpl<>(emotions, pageable, 5);
+        var emotions = EmotionProvider.generateEmotionList();
+        var pageable = PageRequest.of(0, 2);
+        var emotionPage = new PageImpl<>(emotions, pageable, 5);
         when(emotionRepository.findAll(pageable)).thenReturn(emotionPage);
-        assertEquals(3, emotionService.findAll(pageable).getTotalPages());
-        assertEquals(5, emotionService.findAll(pageable).getTotalElements());
+
+        var totalPages = emotionService.findAll(pageable).getTotalPages();
+        var totalElements = emotionService.findAll(pageable).getTotalElements();
+
+        assertEquals(3, totalPages);
+        assertEquals(5, totalElements);
+
         verify(emotionRepository, times(2)).findAll(pageable);
         verifyNoMoreInteractions(emotionRepository);
     }
 
     @Test
-    public void findById_withExistingEmotionId_returnsQuestion() {
-        Emotion emotion = new Emotion("test");
+    void findById_withExistingEmotionId_returnsQuestion() {
+        var emotion = EmotionProvider.createEmotion();
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.of(emotion));
-        EmotionResponseDto emotionResponseDto = emotionService.findById(1L);
-        assertEquals(emotion.getId(), emotionResponseDto.getId());
-        assertEquals(emotion.getDescription(), emotionResponseDto.getDescription());
+
+        var emotionResponseDto = emotionService.findById(1L);
+
+        var actualEmotionId = emotionResponseDto.getId();
+        var actualEmotionDescription = emotionResponseDto.getDescription();
+
+        assertEquals(emotion.getId(), actualEmotionId);
+        assertEquals(emotion.getDescription(), actualEmotionDescription);
+
         verify(emotionRepository, times(1)).findById(1L);
         verifyNoMoreInteractions(emotionRepository);
     }
 
     @Test
-    public void findEmotionByNonexistentId() {
+    void findEmotionByNonexistentId() {
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> emotionService.findById(anyLong())).isInstanceOf(ResourceNotFoundException.class);
+        assertThrows(ResourceNotFoundException.class, () -> emotionService.findById(1L));
     }
 
     @Test
     void create_withCorrectArguments_returnsCreatedEmotion() {
-        Emotion emotion = new Emotion("emotion");
+        var emotion = EmotionProvider.createEmotion();
         when(emotionRepository.save(any())).thenReturn(emotion);
-        EmotionRequestDto emotionRequestDto = new EmotionRequestDto();
-        emotionRequestDto.setDescription("emotion");
-        EmotionResponseDto emotionResponseDto = emotionService.create(emotionRequestDto);
-        assertEquals(emotionResponseDto.getDescription(), emotion.getDescription());
+
+        var emotionRequestDto = EmotionProvider.createEmotionDTO();
+        var emotionResponseDto = emotionService.create(emotionRequestDto);
+        var actualEmotionDescription = emotion.getDescription();
+
+        assertEquals(emotionResponseDto.getDescription(), actualEmotionDescription);
         assertNull(emotionResponseDto.getId());
+
         verify(emotionRepository, times(1)).save(any());
         verifyNoMoreInteractions(emotionRepository);
     }
 
     @Test
     void updateData_withCorrectArguments_returnsUpdatedEmotion() {
-        Emotion emotion = new Emotion("emotion");
+        var emotion = EmotionProvider.createEmotion();
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.of(emotion));
-        Emotion expected = new Emotion("emotion1");
+
+        var expected = EmotionProvider.createAnotherEmotion();
         when(emotionRepository.save(any())).thenReturn(expected);
-        EmotionRequestDto emotionRequestDto = new EmotionRequestDto();
-        emotionRequestDto.setDescription("emotion1");
-        EmotionResponseDto emotionResponseDto = emotionService.update(1L, emotionRequestDto);
-        assertEquals(emotionResponseDto.getDescription(), expected.getDescription());
+
+        var emotionRequestDto = EmotionProvider.createEmotionDTO();
+
+        var emotionResponseDto = emotionService.update(1L, emotionRequestDto);
+        var actualEmotionDescription = expected.getDescription();
+
+        assertEquals(emotionResponseDto.getDescription(), actualEmotionDescription);
+
         verify(emotionRepository, times(1)).save(any());
         verifyNoMoreInteractions(emotionRepository);
     }
 
     @Test
-    public void update_withIncorrectEmotionId_throwsResourceNotFoundException() {
+    void update_withIncorrectEmotionId_throwsResourceNotFoundException() {
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.empty());
-        EmotionRequestDto emotionRequestDto = new EmotionRequestDto();
-        emotionRequestDto.setDescription("emotion1");
+        var emotionRequestDto = EmotionProvider.createAnotherEmotionDTO();
+        
         assertThatThrownBy(() -> emotionService.update(1L, emotionRequestDto))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
@@ -117,19 +137,46 @@ public class EmotionServiceImplTest {
     }
 
     @Test
-    public void deleteById_withIncorrectEmotion_throwsResourceNotFoundException() {
+     void deleteById_withIncorrectEmotion_throwsResourceNotFoundException() {
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> emotionService.deleteById(anyLong()))
+        assertThatThrownBy(() -> emotionService.deleteById(1L))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
-    private List<Emotion> generateEmotionList() {
-        List<Emotion> emotions = new ArrayList<>();
-        emotions.add(new Emotion("emotion"));
-        emotions.add(new Emotion("emotion1"));
-        emotions.add(new Emotion("emotion2"));
-        emotions.add(new Emotion("emotion3"));
-        emotions.add(new Emotion("emotion4"));
-        return emotions;
+
+    @UtilityClass
+    private static final class EmotionProvider {
+
+        private static final String EMOTION_VALUE = "emotion";
+        
+        Emotion createEmotion() {
+            return new Emotion(EMOTION_VALUE);
+        }
+
+        Emotion createAnotherEmotion() {
+            return new Emotion("emotion2");
+        }
+
+        EmotionRequestDto createEmotionDTO() {
+            var emotionDto = new EmotionRequestDto();
+            emotionDto.setDescription(EMOTION_VALUE);
+            return emotionDto;
+        }
+
+        EmotionRequestDto createAnotherEmotionDTO() {
+            var emotionDto = new EmotionRequestDto();
+            emotionDto.setDescription("emotion1");
+            return emotionDto;
+        }
+        
+        List<Emotion> generateEmotionList() {
+            return List.of(
+                    new Emotion("emotion"),
+                    new Emotion("emotion1"),
+                    new Emotion("emotion2"),
+                    new Emotion("emotion3"),
+                    new Emotion("emotion4")
+            );
+        }
     }
 }

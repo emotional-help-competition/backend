@@ -8,6 +8,7 @@ import com.epam.emotionalhelp.model.Question;
 import com.epam.emotionalhelp.repository.EmotionRepository;
 import com.epam.emotionalhelp.repository.QuestionRepository;
 import com.epam.emotionalhelp.service.QuestionService;
+import lombok.experimental.UtilityClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +39,7 @@ class QuestionServiceImplTest {
     private QuestionRepository questionRepository;
     @Mock
     private EmotionRepository emotionRepository;
-    private QuestionService  questionService;
+    private QuestionService questionService;
 
     @BeforeEach
     void setUp() {
@@ -48,53 +49,66 @@ class QuestionServiceImplTest {
 
     @Test
     void findAll_returnsPageQuestionResponseDto() {
-        List<Question> questions = generateQuestions();
-        PageRequest pageable = PageRequest.of(0, 2);
+        var questions = generateQuestions();
+        var pageable = PageRequest.of(0, 2);
         Page<Question> questionPage = new PageImpl<>(questions, pageable, 5);
         when(questionRepository.findAll(pageable)).thenReturn(questionPage);
-        assertEquals(3, questionService.findAll(pageable).getTotalPages());
-        assertEquals(5, questionService.findAll(pageable).getTotalElements());
+
+        var actualTotalPages = questionService.findAll(pageable).getTotalPages();
+        var actualTotalElements = questionService.findAll(pageable).getTotalElements();
+
+        assertEquals(3, actualTotalPages);
+        assertEquals(5, actualTotalElements);
         verify(questionRepository, times(2)).findAll(pageable);
         verifyNoMoreInteractions(questionRepository);
     }
 
 
     @Test
-    public void findById_withExistingQuestionId_returnsQuestion() {
+    void findById_withExistingQuestionId_returnsQuestion() {
         Emotion emotion = new Emotion("test");
         Question question = new Question("test", emotion);
         when(questionRepository.findById(anyLong())).thenReturn(Optional.of(question));
-        QuestionResponseDto actualQuestion = questionService.findById(1L);
-        assertEquals(question.getId(), actualQuestion.getId());
-        assertEquals(question.getText(), actualQuestion.getText());
-        assertEquals(question.getEmotion(), actualQuestion.getEmotion());
+        var actualQuestion = questionService.findById(1L);
+        var actualId = actualQuestion.getId();
+        var actualText = actualQuestion.getText();
+        var actualEmotion = actualQuestion.getEmotion();
+
+        assertEquals(question.getId(), actualId);
+        assertEquals(question.getText(), actualText);
+        assertEquals(question.getEmotion(), actualEmotion);
+
         verify(questionRepository, times(1)).findById(1L);
         verifyNoMoreInteractions(questionRepository);
     }
 
     @Test
-    public void findQuestionByNonexistentId() {
+    void findQuestionByNonexistentId() {
         when(questionRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> questionService.findById(anyLong())).isInstanceOf(ResourceNotFoundException.class);
+        assertThatThrownBy(() -> questionService.findById(1L)).isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test
     void create_withCorrectArguments_returnsCreatedQuestion() {
         Emotion emotion = new Emotion(1L, "test");
-        Question question = generateQuestion("question", emotion);
+        var question = generateQuestion("question", emotion);
         when(questionRepository.save(any())).thenReturn(question);
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.of(emotion));
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("question", emotion);
-        QuestionResponseDto questionResponseDto = questionService.create(questionRequestDto);
-        assertEquals(questionRequestDto.getText(), question.getText());
-        assertEquals(questionResponseDto.getEmotion(), question.getEmotion());
+        var questionResponseDto = questionService.create(questionRequestDto);
+        var actualText = question.getText();
+        var actualEmotion =    question.getEmotion();
+
+        assertEquals(questionRequestDto.getText(), actualText);
+        assertEquals(questionResponseDto.getEmotion(), actualEmotion);
         assertNull(questionResponseDto.getId());
+
         verify(questionRepository, times(1)).save(any());
         verifyNoMoreInteractions(questionRepository);
     }
 
     @Test
-    public void add_withIncorrectEmotionId_throwsResourceNotFoundException() {
+    void add_withIncorrectEmotionId_throwsResourceNotFoundException() {
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("question", new Emotion(1L, "emotion"));
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> questionService.create(questionRequestDto)).isInstanceOf(ResourceNotFoundException.class);
@@ -109,16 +123,20 @@ class QuestionServiceImplTest {
         Question expected = new Question("question1", new Emotion(2L, "emotion 2"));
         when(questionRepository.save(any())).thenReturn(expected);
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("question1", new Emotion(2L, "emotion2"));
-        QuestionResponseDto actual = questionService.update(1L, questionRequestDto);
-        assertEquals(actual.getText(), expected.getText());
-        assertEquals(actual.getEmotion(), expected.getEmotion());
+        var actual = questionService.update(1L, questionRequestDto);
+        var actualText = expected.getText();
+        var actualEmotion = expected.getEmotion();
+
+        assertEquals(actual.getText(),actualText );
+        assertEquals(actual.getEmotion(), actualEmotion);
+
         verify(questionRepository, times(1)).save(any());
         verifyNoMoreInteractions(questionRepository);
 
     }
 
     @Test
-    public void update_withIncorrectQuestionId_throwsResourceNotFoundException() {
+    void update_withIncorrectQuestionId_throwsResourceNotFoundException() {
         when(questionRepository.findById(anyLong())).thenReturn(Optional.empty());
         QuestionRequestDto questionRequestDto = new QuestionRequestDto("question1",
                 new Emotion(2L, "emotion2"));
@@ -136,9 +154,9 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    public void deleteById_withIncorrectQuestionId_throwsResourceNotFoundException() {
+    void deleteById_withIncorrectQuestionId_throwsResourceNotFoundException() {
         when(questionRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> questionService.deleteById(anyLong()))
+        assertThatThrownBy(() -> questionService.deleteById(1L))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
@@ -159,4 +177,5 @@ class QuestionServiceImplTest {
         questions.add(generateQuestion("question4", generateEmotion("test4")));
         return questions;
     }
+
 }
