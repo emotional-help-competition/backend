@@ -170,13 +170,13 @@ class EmotionServiceImplTest {
         }
         
         List<Emotion> generateEmotionList() {
-            List<Emotion> emotions = new ArrayList<>();
-            emotions.add(new Emotion("emotion"));
-            emotions.add(new Emotion("emotion1"));
-            emotions.add(new Emotion("emotion2"));
-            emotions.add(new Emotion("emotion3"));
-            emotions.add(new Emotion("emotion4"));
-            return emotions;
+            return List.of(
+                    new Emotion("emotion"),
+                    new Emotion("emotion1"),
+                    new Emotion("emotion2"),
+                    new Emotion("emotion3"),
+                    new Emotion("emotion4")
+            );
         }
     }
 }
