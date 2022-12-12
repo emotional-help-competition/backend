@@ -113,7 +113,7 @@ public class QuizController {
      * @param emotions the emotions
      * @return the attempt dto
      */
-    @Operation(summary = "Get quiz results")
+    @Operation(summary = "Save quiz results")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns attempt id for these results",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

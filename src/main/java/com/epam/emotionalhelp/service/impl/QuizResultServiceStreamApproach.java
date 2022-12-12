@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.epam.emotionalhelp.service.util.ExceptionSupplier.*;
@@ -39,6 +36,7 @@ public class QuizResultServiceStreamApproach implements QuizResultService {
     private static final int HEXAGON_CAPACITY = 3;
     private static final int PERCENT_COEFFICIENT = 100;
     private static final int SCORE_COEFFICIENT = 20;
+    private static final long MAX_BIG_EMOTIONS_QUANTITY = 6L;
 
     private final QuizResultRepository quizResultRepository;
     private final EmotionRepository emotionRepository;
@@ -50,6 +48,8 @@ public class QuizResultServiceStreamApproach implements QuizResultService {
     public List<EmotionalMapDto> findQuizResultsByAttemptId(Long attemptId) {
         return quizResultRepository.findAllByAttemptId(attemptId).stream()
                 .map(RecommendationMapper::toEmotionDto)
+                .sorted(Comparator.comparing(EmotionDto::getValue).reversed())
+                .limit(MAX_BIG_EMOTIONS_QUANTITY)
                 .map(this::prepareEmotionalMapDto)
                 .collect(Collectors.toList());
     }
