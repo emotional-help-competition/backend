@@ -103,6 +103,7 @@ class EmotionServiceImplTest {
     void updateData_withCorrectArguments_returnsUpdatedEmotion() {
         var emotion = EmotionProvider.createEmotion();
         when(emotionRepository.findById(anyLong())).thenReturn(Optional.of(emotion));
+
         var expected = EmotionProvider.createAnotherEmotion();
         when(emotionRepository.save(any())).thenReturn(expected);
         EmotionRequestDto emotionRequestDto = new EmotionRequestDto();
